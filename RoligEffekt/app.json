@@ -1,0 +1,12 @@
+{
+  "name": "RoligEffekt",
+  "displayName": "RoligEffekt",
+  "expo": {
+    "name": "RoligEffekt",
+    "slug": "RoligEffekt",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
