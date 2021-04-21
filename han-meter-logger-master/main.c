@@ -268,6 +268,7 @@ int main(int argc, char** argv) {
     printf("Timer inititalized!\n");*/
 
     while (*running) {
+      //Läser datan från dongeln och lägger det i raw_pack
       struct raw_packet_t* raw_pack = retrieve_packet();
       post_data(raw_pack);
       raw_destroy(raw_pack);
