@@ -20,16 +20,22 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(smartMeterRouter);
 app.use(userRouter);
+app.use(bodyParser.raw({type: 'application/json'}))
+    .post('/', (req, res) => {
+        console.log('body: ',req.body);
+        res.send("ok")  
+    }).listen(3000, () => console.info('listening on port 3000..'))
 
-/* == Error Handler == */
+/* == Error Handler == 
 app.use(function (err, req, res, next) {
     console.error(err.stack)
     res.status(HttpStatus.INTERNAL_SERVER_ERROR).send('Something broke!')
 });
 
 /* == Start listening == */
-app.listen(port, () => {
+/*app.listen(port, () => {
     console.info(`=== Smart Meter Backend v${app_ver} ===`)
     console.info(`Listening -> ${hostname}:${port}`);
-});
+
+});*/
 
