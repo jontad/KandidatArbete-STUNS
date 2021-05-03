@@ -1,15 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, Button, SafeAreaView } from 'react-native';
-import LongButton from './client/src/components/LongButton'
-
+import SegmentedButton from './client/src/components/SegmentedButton'
 
 export default function App() {
   console.log("App executed")
 
   return (
     <SafeAreaView style={styles.container}>
-      <LongButton title='Login' buttonColor='white' textColor='#5DB075'/>
+      <SegmentedButton segmentOne='Översikt' segmentTwo='Detalj' />
     </SafeAreaView>
   );
 }

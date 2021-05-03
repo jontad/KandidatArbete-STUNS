@@ -1,12 +1,10 @@
-import React, {Component} from 'react'
+import React from 'react'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-import styled from 'styled-components';
 
 
 const LongButton = (props) => 
-    <TouchableOpacity style={ styles(props).button } //onPress={onPress} 
-    >
+    <TouchableOpacity style={ styles(props).button } /* onPress={onPress} */>
         <Text style={ styles(props).text }>
              {props.title}
         </Text>
