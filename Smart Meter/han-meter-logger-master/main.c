@@ -76,25 +76,10 @@ struct raw_packet_t* retrieve_packet() {
 
   raw_packet_parse(buf, raw_pack);
 
-  /*printf("Packet type 0x%02X from %s (List %s):\n", raw_pack->type, raw_pack->meter_id, raw_pack->list_version);
-  printf("\t Meter type: %s\n", raw_pack->meter_type);
-  printf("\t Active Power +: %dW\n", raw_pack->active_power_p);
-  printf("\t Active Power -: %dW\n", raw_pack->active_power_n);
-  printf("\t Reactive Power +: %dW\n", raw_pack->reactive_power_p);
-  printf("\t Reactive Power -: %dW\n", raw_pack->reactive_power_n);
-  printf("\t Current L1: %fA\n", raw_pack->i_l1);
-  printf("\t Current L2: %fA\n", raw_pack->i_l2);
-  printf("\t Current L3: %fA\n", raw_pack->i_l3);
-  printf("\t Voltage L1: %dV\n", raw_pack->u_l1);
-  printf("\t Voltage L2: %dV\n", raw_pack->u_l2);
-  printf("\t Voltage L3: %dV\n", raw_pack->u_l3);*/
-
   return raw_pack;
 }
 
 char* generate_json(struct raw_packet_t* raw) {
-  //printf("Got raw_pack %p\n", raw);
-  //printf("Meter: %s\n", raw->meter_id);
   char* json;
   asprintf(&json, "{\"%s\": \"%s\", \"%s\": \"%s\", \"%s\": \"%s\", \"%s\": %d, \"%s\": %d, \"%s\": %d, \"%s\": %d, \"%s\": %f, \"%s\": %f, \"%s\": %f, \"%s\": %d, \"%s\": %d, \"%s\": %d, \"%s\": \"%s\"}", 
       "OBISIdentifier", raw->list_version, 
@@ -127,7 +112,6 @@ void post_data(struct raw_packet_t* raw) {
   agent[sizeof agent - 1] = 0;
   curl_easy_setopt(curl, CURLOPT_USERAGENT, agent);
 
-  //headers = curl_slist_append(headers, "Expect:");
   headers = curl_slist_append(headers, "Content-Type: application/json");
   curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
@@ -144,32 +128,14 @@ void post_data(struct raw_packet_t* raw) {
   free(json);
 }
 
-void test_json() {
-  struct raw_packet_t* testp = (struct raw_packet_t*) malloc(sizeof(raw_packet_t));
-  testp->list_version = "Kamstrup_0001";
-  testp->meter_id = "0A07DA8S5D6SA5F";
-  testp->meter_type = "0ABC";
-  testp->active_power_n = 1;
-  testp->active_power_p = 12;
-  testp->reactive_power_p = 2;
-  testp->active_power_n = 3;
-  testp->i_l1 = 0.1;
-  testp->i_l2 = 0.2;
-  testp->i_l3 = 0.3;
-  testp->u_l1 = 230;
-  testp->u_l1 = 225;
-  testp->u_l1 = 235;
-  testp->date = "2020-02-18 16:46:55";
 
-  generate_json(testp);
-}
-
+////////////////////////////////// Main function //////////////////////////////////////
 int main(int argc, char** argv) {
   printf("%s\n", curl_version());
   curl = (CURL*) malloc(sizeof(CURL));
-  //test_json();
   if (argc < 2) {
     fprintf(stderr, "Not enough args\n\thanClient <serial port>\n");
+    free(curl);
     return 1;
   }
 
@@ -177,6 +143,7 @@ int main(int argc, char** argv) {
 
   if (serial_port < 0) {
     fprintf(stderr, "Error %i when opening serial port: %s\n", errno, strerror(errno));
+    free(curl);
     return 2;
   }
 
@@ -184,6 +151,7 @@ int main(int argc, char** argv) {
   if (tcgetattr(serial_port, &tty) != 0) {
     fprintf(stderr, "Error %i when initializing serial port: %s\n", errno, strerror(errno));
     close(serial_port);
+    free(curl);
     return 3;
   }
 
@@ -234,34 +202,6 @@ int main(int argc, char** argv) {
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, printout);
     //curl_easy_setopt(curl, CURLOPT_WRITEDATA, recv_buf);
 
-    // TESTS
-    //CURLcode res;
-    //res = curl_easy_perform(curl);
-    //printf("%s\n", curl_easy_strerror(res));
-
-
-    /*struct sigaction act = {0};
-    struct timeval interval;
-    struct itimerval period;
-
-    act.sa_handler = do_work;
-    sigaction(SIGALRM, &act, NULL);
-
-    interval.tv_sec = TIMING;
-    interval.tv_usec = 0;
-
-    period.it_interval = interval;
-    period.it_value = interval;
-
-    setitimer(ITIMER_REAL, &period, NULL);
-    
-    struct sigaction intc = {0};
-    intc.sa_handler = do_close;
-
-    sigaction(SIGINT, &intc, NULL);
-
-    printf("Timer inititalized!\n");*/
-
     char *keep_reading = "";
     while (*running) {
       //Läser datan från dongeln och lägger det i raw_pack
@@ -269,10 +209,10 @@ int main(int argc, char** argv) {
       post_data(raw_pack);
       raw_destroy(raw_pack);
       printf("Det är här vi loopar hela tiden \n");
-      //keep_reading = ask_question_string("Read again? Y/N \n");
-      //if(keep_reading[0] == 'n' || keep_reading[0] == 'N') {
-      //  *running = 0; 
-      //}
+      keep_reading = ask_question_string("Read again? Y/N \n");
+      if(keep_reading[0] == 'n' || keep_reading[0] == 'N') {
+        *running = 0; 
+      }
     }
     free(keep_reading);
     //free(*running)
@@ -282,5 +222,6 @@ int main(int argc, char** argv) {
     printf("Could not initialize CURL\n");
   }
   curl_global_cleanup();
+  //*/
   return 0;
 }
