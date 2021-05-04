@@ -11,14 +11,14 @@ const hostname = require('ip').address();
 const app_ver = process.env.APP_VERSION;
 
 require('./db/mongoose');
-const userRouter = require('./routers/user');
-const smartMeterRouter = require('./routers/smartMeter');
+//const userRouter = require('./routers/user');
+//const smartMeterRouter = require('./routers/smartMeter');
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
-app.use(smartMeterRouter);
-app.use(userRouter);
+//app.use(smartMeterRouter);
+//app.use(userRouter);
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.setHeader(
