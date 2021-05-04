@@ -41,18 +41,33 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect(err => {
     const db = client.db("RoligEffekt");
     const userReadings = db.collection("UserReadings");
+    const realTimeData = db.collection("RealTime");
     
     //FUNKTIONER-----------------------------------------------------
-    async function insertData(jsonData){
-	console.log("Insert Data");
+    async function insertDataCont(jsonData){
 	let data = await userReadings.insertOne(jsonData).catch((error) => console.error(error));
     };
+
+    async function realTime(jsonData){
+	let currentData = await realTimeData.findOne({MeterID: jsonData.MeterID});
+	//console.log("CurrentData = " + currentData);
+	if(currentData == undefined){
+	    let insertData = await realTimeData.insertOne(jsonData).catch((error) => console.error(error));
+	}
+	else{
+	    let replacedData = await realTimeData.replaceOne({MeterID: jsonData.MeterID}, jsonData);
+	    console.log(replacedData);
+	};
+    }
 
     //DATA READING FROM HAN_MODULE EVERY 10 SECONDS
     app.use(bodyParser.raw({type: 'application/json'}))
 	.post('/', async (req, res) => {
             console.log('body: ',req.body);
-	    await insertData(req.body);
+	    //Stoppa in data
+	    //----------await insertDataCont(req.body);
+	    //Stoppa in RealTime data (Byt ut varje json object i databasen med ny json baserat på ID)
+	    await realTime(req.body);
             res.send("ok")
 	}).listen(3000, () => console.info('listening on port 3000..'));
 });
