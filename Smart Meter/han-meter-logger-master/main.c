@@ -2,18 +2,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdint.h>
+#include <stdint.h> 
 
 #include <fcntl.h>
 #include <errno.h>
 #include <termios.h>
 #include <unistd.h>
 #include <signal.h>
-
 #include <curl/curl.h>
-
 #include "han_packet.h"
-
+#include "utils.h"
 #define SERVER_ADRESS "https://ramlosa.midgaard.nu/api"
 //#define SERVER_ADRESS "https://text.npr.org/"
 
@@ -31,11 +29,8 @@ struct termios tty;
 
 char* recv_buf;
 
-void upload_data() {
-
-}
-
 void do_close(int sig) {
+  printf("do_close används");
   if (sig == SIGINT) {
     *running = 0;
   }
@@ -267,18 +262,25 @@ int main(int argc, char** argv) {
 
     printf("Timer inititalized!\n");*/
 
+    char *keep_reading = "";
     while (*running) {
       //Läser datan från dongeln och lägger det i raw_pack
       struct raw_packet_t* raw_pack = retrieve_packet();
       post_data(raw_pack);
       raw_destroy(raw_pack);
+      printf("Det är här vi loopar hela tiden \n");
+      //keep_reading = ask_question_string("Read again? Y/N \n");
+      //if(keep_reading[0] == 'n' || keep_reading[0] == 'N') {
+      //  *running = 0; 
+      //}
     }
+    free(keep_reading);
+    //free(*running)
     curl_easy_cleanup(curl);
     close(serial_port);
   } else {
     printf("Could not initialize CURL\n");
   }
-  
   curl_global_cleanup();
   return 0;
 }
