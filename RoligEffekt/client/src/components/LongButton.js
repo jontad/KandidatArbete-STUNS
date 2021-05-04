@@ -2,6 +2,11 @@ import React from 'react'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 
+/*
+Horizontal button used in login/signup
+
+*/
+
 
 const LongButton = (props) => 
     <TouchableOpacity style={ styles(props).button } /* onPress={onPress} */>
@@ -20,7 +25,7 @@ const styles = (props) => StyleSheet.create({
     button: {
         alignItems: "center",
         padding: '11px ',
-        backgroundColor: props.buttonColor,
+        backgroundColor: props.backgroundColor,
         overflow: 'hidden', 
         borderRadius: '100px',
         position: 'absolute',
