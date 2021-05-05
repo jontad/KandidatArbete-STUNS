@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, SafeAreaView } from 'react-native';
 import SegmentedButton from './client/src/components/SegmentedButton'
 import LongButton from './client/src/components/LongButton'
@@ -7,24 +7,26 @@ import InfoCard from './client/src/components/InfoCard'
 
 import axios from 'axios';
 
-function onPressButton() {
-  console.log("Hello")
-}
 
-export default function App() {
+export default class App extends Component {
+  
+  _onPress(){
+    console.log("Button pressed")
+  }
 
-  console.log("App executed")
-  //<LongButton title='Hello' backgroundColor='#5DB075' textColor='white'/>
-  return (
-    <SafeAreaView style={styles.container}>
-      <SegmentedButton segmentOne='Översikt' segmentTwo='Detalj' />
-    
-      <TestButton onClick={() => onPressButton()} title='Hello' backgroundColor='blue' textColor='white' 
-    />
-      <InfoCard headerText='Förbrukning idag' leftText='234 kWh' rightText='129.02kr' timeText='8m' />
-    </SafeAreaView>
-  );
-}
+  render(){
+//<LongButton title='Hello' backgroundColor='#5DB075' textColor='white' height='51px' left='16px' right='16px' bottom='342px'/>
+    return (
+      <SafeAreaView style={styles.container}>
+        <SegmentedButton segmentOne='Översikt' segmentTwo='Detalj' />
+      
+        <TestButton onPress={this._onPress} title='Yo' backgroundColor='blue' textColor='white' />
+        <InfoCard headerText='Förbrukning idag' leftText='234 kWh' rightText='129.02kr' timeText='8m' />
+      </SafeAreaView>
+    );
+    }
+  }
+  
 
 const styles = StyleSheet.create({
   container: {

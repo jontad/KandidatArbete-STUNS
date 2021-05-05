@@ -13,14 +13,15 @@ function InfoCard(props) {
     };
 
     return (
-        <SafeAreaView>
-            <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.container}>
+            <SafeAreaView style={styles.itemOrientation}>
                 <Text style={styles.header}>{props.headerText} </Text>
                 <Text style={styles.timeText}>{props.timeText}</Text>
-            </SafeAreaView>
-            <SafeAreaView style={styles.container}>
                 <Text style={styles.leftText}>{props.leftText} </Text>
                 <Text style={styles.rightText}>{props.rightText}</Text>
+            </SafeAreaView>
+            <SafeAreaView style={[styles.border]}>
+                
             </SafeAreaView>
         </SafeAreaView>
     ); 
@@ -31,52 +32,37 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         flexWrap: 'wrap',
-        alignItems: 'flex-start',
-        borderBottomWidth: 'thin'
+        alignItems: 'flex-start' 
+    },
+    itemOrientation: {
+        width: '50%'
     },
     header: {
         fontWeight: '600',
         fontSize: '16px',
-        lineHeight: '19px',
-        width: '143px',
-        height: '19px',
-        left: '66px',
-        top: '0px',
-    },
-    leftText: {
-        fontWeight: '500',
-        fontSize: '24px',
-        lineHeight: '29px',
-
-        height: '29px',
-        left: '66px',
-        right: '8px',
-        top: '27px',
-    },
-    rightText: {
-        fontWeight: '500',
-        fontSize: '24px',
-        lineHeight: '29px',
-
-        height: '29px',
-        left: '66px',
-        right: '8px',
-        top: '27px',
-
+        opacity: '0.7', 
+        flex: 3   
     },
     timeText: {
         color: '#BDBDBD',
         fontStyle: 'normal',
         fontWeight: 'normal',
         fontSize: '14px',
-        lineHeight: '17px',
-
-        width: '50px',
-        height: '17px',
-        right: '0px',
-        top: '2px'
     },
+    leftText: {
+        fontWeight: '500',
+        fontSize: '24px',
 
+    },
+    rightText: {
+        fontWeight: '500',
+        fontSize: '24px',
+    },
+    
+    border: {
+        borderColor: 'rgba(158, 150, 150, .3)', 
+        borderBottomWidth: 'thin'
+    }
   });
 
 export default InfoCard;

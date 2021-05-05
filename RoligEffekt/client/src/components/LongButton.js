@@ -29,10 +29,10 @@ const styles = (props) => StyleSheet.create({
         overflow: 'hidden', 
         borderRadius: '100px',
         position: 'absolute',
-        height: '51px',
-        left: '16px',
-        right: '16px',
-        bottom: '342px'
+        height: props.height,
+        left: props.left,
+        right: props.right,
+        bottom: props.bottom
     },
     text: {
         textAlign: 'center',

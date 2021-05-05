@@ -5,7 +5,7 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 
 const TestButton = (props) => 
-    <TouchableOpacity style={ styles(props).button } /* onPress={onPress} */>
+    <TouchableOpacity onPress={props.onPress} style={styles(props).button}  >
         <Text style={ styles(props).text }>
              {props.title}
         </Text>
