@@ -4,11 +4,15 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const HttpStatus = require('http-status-codes');
+const url = require('url');
+const cors = require('cors');
+
 
 const app = express();
 const port = process.env.APP_PORT || 3000;
 const hostname = require('ip').address();
 const app_ver = process.env.APP_VERSION;
+
 
 require('./db/mongoose');
 //const userRouter = require('./routers/user');
@@ -17,8 +21,12 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
 //app.use(smartMeterRouter);
 //app.use(userRouter);
+
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.setHeader(
@@ -32,6 +40,7 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.listen(port, () => console.log("Listening on port 3000"));
 //MONGODB INIT
 const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://Vlad-Ber:arneiskogen1@cluster0.ab29i.mongodb.net/RoligEffekt?retryWrites=true&w=majority";
@@ -56,20 +65,30 @@ client.connect(err => {
 	}
 	else{
 	    let replacedData = await realTimeData.replaceOne({MeterID: jsonData.MeterID}, jsonData);
-	    console.log(replacedData);
 	};
     }
+    async function getRealTime(meterID){
+	let realTimeDataa = await realTimeData.findOne({MeterID: meterID})
+	return realTimeDataa.IL1;
+    }
 
+    //REQUESTS--------------------------------------------------------------------------
+
+    app.post("/getRealTimeIL1",async(req, res) => {
+	var il1 = await getRealTime(req.body.MeterID);
+	res.send({IL1: il1});
+     });
+    
     //DATA READING FROM HAN_MODULE EVERY 10 SECONDS
     app.use(bodyParser.raw({type: 'application/json'}))
 	.post('/', async (req, res) => {
-            console.log('body: ',req.body);
 	    //Stoppa in data
 	    //----------await insertDataCont(req.body);
 	    //Stoppa in RealTime data (Byt ut varje json object i databasen med ny json baserat på ID)
 	    await realTime(req.body);
             res.send("ok")
-	}).listen(3000, () => console.info('listening on port 3000..'));
+	});
+
 });
 client.close();
 
