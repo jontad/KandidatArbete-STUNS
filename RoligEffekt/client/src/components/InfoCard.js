@@ -1,68 +1,59 @@
 import React, {useState} from 'react'
-import { StyleSheet, SafeAreaView, View, Text } from 'react-native';
+import { StyleSheet, Image, View, Text,  } from 'react-native';
+import { Card } from "react-native-elements";
 
 /*
 Single infocard displayed on home page 
 that shows desired information
 */
 
-function InfoCard(props) {
-    const [selectedIndex, setSelectedIndex] = useState(0);
-    const _onChange = (event) => {
-        setSelectedIndex(event.nativeEvent.selectedSegmentIndex);
-    };
+const users = [{
+       name: 'brynn',
+       avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg'
+    },]
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <SafeAreaView style={styles.itemOrientation}>
-                <Text style={styles.header}>{props.headerText} </Text>
-                <Text style={styles.timeText}>{props.timeText}</Text>
-                <Text style={styles.leftText}>{props.leftText} </Text>
-                <Text style={styles.rightText}>{props.rightText}</Text>
-            </SafeAreaView>
-            <SafeAreaView style={[styles.border]}>
-                
-            </SafeAreaView>
-        </SafeAreaView>
-    ); 
+function InfoCard(props) {
+   return(
+    <Card wrapperStyle={styles.wrapperStyle} containerStyle={styles.container}>
+        <Card.FeaturedTitle style={styles.headerText}>{props.headerText}</Card.FeaturedTitle>
+        {
+         <Card.FeaturedSubtitle style={{color: 'rgba(70, 70, 70, 1)'}}>{props.leftText}</Card.FeaturedSubtitle>        
+        }
+        <Card.FeaturedTitle style={styles.timeText}>{props.timeText}</Card.FeaturedTitle>
+        {
+         <Card.FeaturedSubtitle style={styles.rightText}>{props.rightText}</Card.FeaturedSubtitle>        
+        }
+        
+    </Card>
+   );
+    
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        alignItems: 'flex-start' 
+        borderColor: 'rgba(158, 150, 150, .1)', 
+        borderRadius: '10px', 
+        width: '80%'
     },
-    itemOrientation: {
-        width: '50%'
-    },
-    header: {
-        fontWeight: '600',
-        fontSize: '16px',
-        opacity: '0.7', 
-        flex: 3   
-    },
-    timeText: {
-        color: '#BDBDBD',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
-        fontSize: '14px',
+    headerText: {
+        color: 'rgba(70, 70, 70, 1)'
     },
     leftText: {
-        fontWeight: '500',
-        fontSize: '24px',
-
+        color: 'rgba(70, 70, 70, 1)'
+    },
+    timeText: {
+        color: '#BDBDBD', 
+        fontSize: '12px',  
+        position: 'absolute', 
+        right: 0, 
+        top: 0
     },
     rightText: {
-        fontWeight: '500',
-        fontSize: '24px',
+        color: 'rgba(70, 70, 70, 1)',  
+        position: 'absolute', 
+        right: 0, 
+        bottom: 0
     },
-    
-    border: {
-        borderColor: 'rgba(158, 150, 150, .3)', 
-        borderBottomWidth: 'thin'
-    }
   });
 
 export default InfoCard;
