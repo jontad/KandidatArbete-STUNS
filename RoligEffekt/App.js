@@ -9,7 +9,6 @@ import NavBar from './client/src/components/NavBar'
 
 export default class App extends Component {
   
-<<<<<<< Updated upstream
     _onPress(){
 	console.log("Button pressed");
 	axios.post("http://localhost:3000/getRealTimeIL1",
@@ -23,37 +22,16 @@ export default class App extends Component {
 		       console.log("Got error with respond", error);
 		   });
     }
-=======
 
   _onPress(){
     console.log("Button pressed")
   }
->>>>>>> Stashed changes
 
   render(){
      
     return (
       <SafeAreaView style={styles.container}>
-<<<<<<< Updated upstream
-        <SegmentedButton segmentOne='Översikt' segmentTwo='Detalj' />
-        <TestButton onPress={this._onPress} title='Yo' backgroundColor='blue' textColor='white' />
-        
-        <InfoCard headerText='Förbrukning idag' leftText='234 kWh' rightText='129.02kr' timeText='8m' />
-        
-        <TextField 
-        autoCompleteType='username' 
-        keyboardType='default' 
-        placeholder='Username'  
-        leftIcon={
-          <Icon
-          name='user'
-          size={24}
-          color='black'/>
-        }
-        />
-=======
         <NavBar />
->>>>>>> Stashed changes
        
       </SafeAreaView>
     );
