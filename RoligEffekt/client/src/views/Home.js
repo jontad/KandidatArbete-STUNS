@@ -1,12 +1,31 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, Text, SafeAreaView } from 'react-native';
 
-class Home extends React.Component {
+import InfoCard from '../components/InfoCard'
+
+class Home extends Component {
+
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Homescreen</Text>
-      </View>
+      <SafeAreaView >
+        <InfoCard 
+        headerText='Användande nu' 
+        leftText='1337 w' 
+        timeText='8m'
+        />
+         <InfoCard 
+        headerText='Förbrukning idag' 
+        leftText='234 kWh' 
+        rightText='129.02 kr' 
+        timeText='8m'
+        />
+         <InfoCard 
+        headerText='Situation' 
+        leftText='EXPORT'
+        timeText='8m'
+        />
+      </SafeAreaView>
     );
   }
 }

@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import { StyleSheet, Image, View, Text,  } from 'react-native';
+import React from 'react'
+import { StyleSheet } from 'react-native';
 import { Card } from "react-native-elements";
 
 /*
@@ -7,10 +7,6 @@ Single infocard displayed on home page
 that shows desired information
 */
 
-const users = [{
-       name: 'brynn',
-       avatar: 'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg'
-    },]
 
 function InfoCard(props) {
    return(
@@ -33,7 +29,7 @@ const styles = StyleSheet.create({
     container: {
         borderColor: 'rgba(158, 150, 150, .1)', 
         borderRadius: '10px', 
-        width: '80%'
+        //width: '80%'
     },
     headerText: {
         color: 'rgba(70, 70, 70, 1)'

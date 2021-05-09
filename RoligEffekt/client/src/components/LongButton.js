@@ -9,7 +9,7 @@ Horizontal button used in login/signup
 
 
 const LongButton = (props) => 
-    <TouchableOpacity style={ styles(props).button } /* onPress={onPress} */>
+    <TouchableOpacity onPress={props.onPress} style={ styles(props).button }>
         <Text style={ styles(props).text }>
              {props.title}
         </Text>
