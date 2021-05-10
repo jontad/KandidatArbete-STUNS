@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const HttpStatus = require('http-status-codes');
 const url = require('url');
 const cors = require('cors');
+const fetch = require("node-fetch");
 
 
 const app = express();
@@ -74,10 +75,22 @@ client.connect(err => {
 
     //REQUESTS--------------------------------------------------------------------------
 
+    //Gets realtime data from DB with ID = MeterID
     app.post("/getRealTimeIL1",async(req, res) => {
 	var il1 = await getRealTime(req.body.MeterID);
 	res.send({IL1: il1});
-     });
+    });
+
+    app.post("/liveInFetch", async(req,res) => {	
+	const response = await fetch("https://my.live-in.se/api/powerstatus", {
+	    method: "post",
+	    headers:{
+		"Accept": "application/json",
+		"Content-Type": "text/json",
+		"Authorization":"Bearer 6AmbXTanCHNYMUJEWeGfTpBVDoHiL7UA",
+	    }});
+	res.send(response);
+    });
     
     //DATA READING FROM HAN_MODULE EVERY 10 SECONDS
     app.use(bodyParser.raw({type: 'application/json'}))

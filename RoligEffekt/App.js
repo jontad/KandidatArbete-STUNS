@@ -3,13 +3,15 @@ import { StyleSheet, SafeAreaView } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-
+import axios from "axios";
 import NavBar from './client/src/components/NavBar'
+import TestButton from "./client/src/components/TestButton"
+const https = require("https")
 
 
 export default class App extends Component {
   
-    _onPress(){
+    async _onPress(){
 	console.log("Button pressed");
 	axios.post("http://localhost:3000/getRealTimeIL1",
 		   {
@@ -23,15 +25,24 @@ export default class App extends Component {
 		   });
     }
 
-  _onPress(){
-    console.log("Button pressed")
-  }
+    async _liveInFetch(){
+	console.log("Button pressed");
+	axios.post("http://localhost:3000/liveInFetch",
+		   {
+		       liveIn: "fetch",
+		   }).then((response) => {
+		       console.log(response);
+		   }).catch((error) => {
+		       console.log("Got error with respond", error);
+		   });
+	
+    }
 
   render(){
-     
     return (
       <SafeAreaView style={styles.container}>
-        <NavBar />
+            <NavBar />
+	    <TestButton backgroundColor = "blue" onPress = {this._liveInFetch} title = {"testButton"} />
        
       </SafeAreaView>
     );
