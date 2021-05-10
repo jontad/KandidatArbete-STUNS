@@ -60,7 +60,7 @@ client.connect(err => {
 
     async function realTime(jsonData){
 	let currentData = await realTimeData.findOne({MeterID: jsonData.MeterID});
-	//console.log("CurrentData = " + currentData);
+	//console.log(currentData);
 	if(currentData == undefined){
 	    let insertData = await realTimeData.insertOne(jsonData).catch((error) => console.error(error));
 	}
@@ -70,15 +70,15 @@ client.connect(err => {
     }
     async function getRealTime(meterID){
 	let realTimeDataa = await realTimeData.findOne({MeterID: meterID})
-	return realTimeDataa.IL1;
+	return realTimeDataa;
     }
 
     //REQUESTS--------------------------------------------------------------------------
 
     //Gets realtime data from DB with ID = MeterID
-    app.post("/getRealTimeIL1",async(req, res) => {
-	var il1 = await getRealTime(req.body.MeterID);
-	res.send({IL1: il1});
+    app.post("/getRealTimeData",async(req, res) => {
+	var data = await getRealTime(req.body.MeterID);
+	res.send({data: data});
     });
 
     app.post("/liveInFetch", async(req,res) => {	
