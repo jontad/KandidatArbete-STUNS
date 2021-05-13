@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, SafeAreaView } from 'react-native';
 
 import InfoCard from '../components/InfoCard'
-import axios from "axios";
+import axios from "axios";;
+import TestButton from "../components/TestButton"
 
 class Home extends Component {
     constructor(){
@@ -11,10 +12,14 @@ class Home extends Component {
 	    currentWatt: 0,
 	    usageToday: 0,
 	    situation: "EXPORT",
+	    facility: 0,
+	    trend: "unknown",
+	     
 	}
 	this.fetchData = this.fetchData.bind(this);
     }
     async _getData(){
+	//GET RealtimeDATA
     	await axios.post("http://localhost:3000/getRealTimeData",
 		   {
 		       test: "hejsan",
@@ -25,6 +30,21 @@ class Home extends Component {
 		       this.setState({currentWatt: watt});
 		       console.log(this.state.currentWatt);
 		       return response;
+		   }).catch((error) => {
+		       console.log("Got error with respond", error);
+		   });
+	//Get LIVE-IN API DATA
+	await axios.post("http://localhost:3000/liveInFetch",
+		   {
+		       liveIn: "fetch",
+		   }).then((response) => {
+		       var status = response.data.status;
+		       if(status.output){
+			   this.setState({situation: "EXPORT"});
+		       }
+		       else{
+			   this.setState({situation: "IMPORT"});
+		       }
 		   }).catch((error) => {
 		       console.log("Got error with respond", error);
 		   });
@@ -40,28 +60,30 @@ class Home extends Component {
 	this.fetchData();
     }
 
-  render() {
-    return (
-      <SafeAreaView >
-        <InfoCard 
-        headerText='Användande nu' 
-        leftText={this.state.currentWatt} 
-        timeText='8m'
-        />
-         <InfoCard 
-        headerText='Förbrukning idag' 
-        leftText='234 kWh' 
-        rightText='129.02 kr' 
-        timeText='8m'
-        />
-         <InfoCard 
-        headerText='Situation' 
-        leftText='EXPORT'
-        timeText='8m'
-        />
-      </SafeAreaView>
-    );
-  }
+    render() {
+	return (
+		<SafeAreaView >
+		<InfoCard 
+            headerText='Användande nu' 
+            leftText={this.state.currentWatt} 
+            timeText='8m'
+		/>
+		<InfoCard 
+            headerText='Förbrukning idag' 
+            leftText='234 kWh' 
+            rightText='129.02 kr' 
+            timeText='8m'
+		/>
+		<InfoCard 
+            headerText='Situation' 
+            leftText={this.state.situation}
+            timeText='8m'
+		/>
+	
+		</SafeAreaView>
+		
+	);
+    }
 }
 
 

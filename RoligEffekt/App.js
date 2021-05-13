@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, SafeAreaView } from 'react-native';
+import { StyleSheet, SafeAreaView} from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -31,7 +31,7 @@ export default class App extends Component {
 		   {
 		       liveIn: "fetch",
 		   }).then((response) => {
-		       console.log(response);
+		       var status = response.data.status;
 		   }).catch((error) => {
 		       console.log("Got error with respond", error);
 		   });
@@ -42,8 +42,6 @@ export default class App extends Component {
     return (
       <SafeAreaView style={styles.container}>
             <NavBar />
-	    <TestButton backgroundColor = "blue" onPress = {this._liveInFetch} title = {"testButton"} />
-       
       </SafeAreaView>
     );
     }

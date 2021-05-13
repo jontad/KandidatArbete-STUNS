@@ -7,7 +7,8 @@ const HttpStatus = require('http-status-codes');
 const url = require('url');
 const cors = require('cors');
 const fetch = require("node-fetch");
-
+var http = require('http');
+const axios = require('axios');
 
 const app = express();
 const port = process.env.APP_PORT || 3000;
@@ -81,15 +82,16 @@ client.connect(err => {
 	res.send({data: data});
     });
 
-    app.post("/liveInFetch", async(req,res) => {	
-	const response = await fetch("https://my.live-in.se/api/powerstatus", {
-	    method: "post",
-	    headers:{
-		"Accept": "application/json",
-		"Content-Type": "text/json",
-		"Authorization":"Bearer 6AmbXTanCHNYMUJEWeGfTpBVDoHiL7UA",
-	    }});
-	res.send(response);
+    app.post("/liveInFetch", async(req,res) => {
+
+	const options = {
+	    headers: {"Authorization":"Bearer 6AmbXTanCHNYMUJEWeGfTpBVDoHiL7UA"}
+	};
+	var resp = await axios.post("https://my.live-in.se/api/powerstatus",{
+	}, options).then((response =>{
+	    var jData = response.data;
+	    res.send(jData);
+	}));
     });
     
     //DATA READING FROM HAN_MODULE EVERY 10 SECONDS
