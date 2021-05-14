@@ -27,7 +27,6 @@ static int serial_port = 0;
 
 struct termios tty;
 
-char* recv_buf;
 
 void do_close(int sig) {
   printf("do_close används");
@@ -103,36 +102,42 @@ char* generate_json(struct raw_packet_t* raw) {
 
 void post_data(struct raw_packet_t* raw) {
   char* json = generate_json(raw);
-
   struct curl_slist* headers = NULL;
   char agent[1024] = { 0, }; 
-
+  
   snprintf(agent, sizeof agent, "hanClient/libcurl/%s",
            curl_version_info(CURLVERSION_NOW)->version);
   agent[sizeof agent - 1] = 0;
+  
   curl_easy_setopt(curl, CURLOPT_USERAGENT, agent);
-
   headers = curl_slist_append(headers, "Content-Type: application/json");
   curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-
+  
   curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json);
-  printf("strlen(json) = %lu\n", strlen(json));
+  //printf("strlen(json) = %lu\n", strlen(json));
   curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(json));
   
+  
   int res = curl_easy_perform(curl);
+  printf("\n RES = %d \n", res);
+  
   if(res != CURLE_OK && res != CURLE_WRITE_ERROR) {
     fprintf(stderr, "\nlibcurl: (%d) ", res);
     fprintf(stderr, "%s\n\n", curl_easy_strerror(res));
   }
+  
   curl_slist_free_all(headers);
   free(json);
+
 }
 
 
-////////////////////////////////// Main function //////////////////////////////////////
+////////////////////////////////// Main function ////////////////////////////////// 
 int main(int argc, char** argv) {
   printf("%s\n", curl_version());
   curl = (CURL*) malloc(sizeof(CURL));
+
+  //Check and test input port
   if (argc < 2) {
     fprintf(stderr, "Not enough args\n\thanClient <serial port>\n");
     free(curl);
@@ -154,7 +159,8 @@ int main(int argc, char** argv) {
     free(curl);
     return 3;
   }
-
+  
+  // Driver programming
   tty.c_cflag &= ~PARENB;
   tty.c_cflag &= ~CSTOPB;
   tty.c_cflag |= CS8;
@@ -185,43 +191,44 @@ int main(int argc, char** argv) {
     return 4;
   }
 
-  running = (int*) malloc(sizeof(int));
-  *running = 1;
+  // Input port initialized, no errors 
 
   curl_global_init(CURL_GLOBAL_ALL);
   curl = curl_easy_init();
 
-  sigemptyset(&susp);
+  
+  sigemptyset(&susp); 
   
   if (curl) {
+    
     printf("CURL initialized!\n");
-
-    recv_buf = (char*) malloc(sizeof(char));
+    
     curl_easy_setopt(curl, CURLOPT_URL, SERVER_ADRESS);
-    //curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, printout);
-    //curl_easy_setopt(curl, CURLOPT_WRITEDATA, recv_buf);
-
-    char *keep_reading = "";
-    while (*running) {
+    
+    running = 0;
+    while (running < 1) {
       //Läser datan från dongeln och lägger det i raw_pack
       struct raw_packet_t* raw_pack = retrieve_packet();
       post_data(raw_pack);
+      printf("Vi har läst");
       raw_destroy(raw_pack);
       printf("Det är här vi loopar hela tiden \n");
-      keep_reading = ask_question_string("Read again? Y/N \n");
-      if(keep_reading[0] == 'n' || keep_reading[0] == 'N') {
-        *running = 0; 
-      }
+      running++; 
+      //break;
+      
     }
-    free(keep_reading);
-    //free(*running)
-    curl_easy_cleanup(curl);
+    
     close(serial_port);
+    
   } else {
     printf("Could not initialize CURL\n");
   }
+  
+  curl_easy_cleanup(curl);
   curl_global_cleanup();
   //*/
+  //free(running);
+  //free(curl);
   return 0;
 }
