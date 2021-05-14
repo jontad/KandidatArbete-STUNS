@@ -48,7 +48,6 @@ struct raw_packet_t* retrieve_packet() {
   } while (buf[0] != 0x7E);
   printf("0x%02X ", buf[0]);
   fflush(stdout);
-  //if (buf[0] != 0x7E) return NULL;
   int cur = 1;
   do {
     read(serial_port, &buf[cur], 1);
@@ -61,9 +60,6 @@ struct raw_packet_t* retrieve_packet() {
   struct raw_packet_t* raw_pack = (struct raw_packet_t*) malloc(sizeof(raw_packet_t));
   raw_pack->type = (buf[1] >> 4) & 0x0f;
   int size = cur;
-  //char* tmp = buf + 8;
-
-  //read(serial_port, tmp, size - 6);
 
   if (size == 0 || raw_pack->type == 0) {
     printf("Got nothing\n");
