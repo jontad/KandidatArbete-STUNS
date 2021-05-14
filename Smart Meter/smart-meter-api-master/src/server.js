@@ -53,8 +53,9 @@ client.connect(err => {
     const db = client.db("RoligEffekt");
     const userReadings = db.collection("UserReadings");
     const realTimeData = db.collection("RealTime");
+    const kwH = db.collection("kwH");
     
-    //FUNKTIONER-----------------------------------------------------
+    //Databas FUNKTIONER-----------------------------------------------------
     async function insertDataCont(jsonData){
 	let data = await userReadings.insertOne(jsonData).catch((error) => console.error(error));
     };
@@ -72,6 +73,30 @@ client.connect(err => {
     async function getRealTime(meterID){
 	let realTimeDataa = await realTimeData.findOne({MeterID: meterID})
 	return realTimeDataa;
+    }
+
+    async function dbKWH(jsonData){
+	var watt = jsonData.ActivePowerPlus;
+	var kiloWattH = (watt/360)/1000;
+	var meterID = jsonData.MeterID;
+	
+	//Date LOGIC
+	var d = new Date();
+	var day = d.getDate().toString();
+	var month = (d.getMonth()+1).toString();
+	var year = d.getFullYear().toString();
+	var date = day+month+year;
+	//--------------------
+	let currentData = await kwH.findOne({MeterID: jsonData.MeterID,Timestamp: date});
+
+	if(currentData == undefined){
+	    let insertData = await kwH.insertOne({MeterID: meterID, Timestamp: date, kwH: kiloWattH }).catch((error) => console.error(error));
+	}
+	else{
+	    let currentKwh = currentData.kwH;
+	    let accumelatedKwh = currentKwh+kiloWattH;
+	    let replacedData = await kwH.replaceOne({MeterID: jsonData.MeterID}, {MeterID: meterID, Timestamp: date, kwH: accumelatedKwh});
+	};
     }
 
     //REQUESTS--------------------------------------------------------------------------
@@ -101,6 +126,7 @@ client.connect(err => {
 	    //----------await insertDataCont(req.body);
 	    //Stoppa in RealTime data (Byt ut varje json object i databasen med ny json baserat på ID)
 	    await realTime(req.body);
+	    await dbKWH(req.body);
             res.send("ok")
 	});
 
