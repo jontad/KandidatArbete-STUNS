@@ -100,7 +100,6 @@ void post_data(struct raw_packet_t* raw) {
   char* json = generate_json(raw);
   struct curl_slist* headers = NULL;
   char agent[1024] = { 0, }; 
-  
   snprintf(agent, sizeof agent, "hanClient/libcurl/%s",
            curl_version_info(CURLVERSION_NOW)->version);
   agent[sizeof agent - 1] = 0;
