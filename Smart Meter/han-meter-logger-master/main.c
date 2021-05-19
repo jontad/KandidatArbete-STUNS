@@ -14,7 +14,7 @@
 
 #include "han_packet.h"
 
-#define SERVER_ADRESS "https://ramlosa.midgaard.nu/api"
+#define SERVER_ADRESS "localhost:3000"
 //#define SERVER_ADRESS "https://text.npr.org/"
 
 #ifndef NULL
@@ -233,9 +233,8 @@ int main(int argc, char** argv) {
   if (curl) {
     printf("CURL initialized!\n");
 
-    char *ADRESS = "localhost:3000";
     recv_buf = (char*) malloc(sizeof(char));
-    curl_easy_setopt(curl, CURLOPT_URL, ADRESS);
+    curl_easy_setopt(curl, CURLOPT_URL, SERVER_ADRESS);
     //curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, printout);
     //curl_easy_setopt(curl, CURLOPT_WRITEDATA, recv_buf);
