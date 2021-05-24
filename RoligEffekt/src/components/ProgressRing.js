@@ -41,7 +41,7 @@ const chartConfig = {
   barPercentage: 0.5,
   labelColor: (opacity = 1) => `rgba(32, 113, 181, ${opacity})`,
   propsForLabels: {
-    fontFamily: 'monospace',
+    //fontFamily: 'monospace',
   },
 }
 

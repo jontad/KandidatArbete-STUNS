@@ -44,9 +44,12 @@ app.use(function (req, res, next) {
 
 app.listen(port, () => console.log("Listening on port 3000"));
 //MONGODB INIT
+
 const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://Vlad-Ber:arneiskogen1@cluster0.ab29i.mongodb.net/RoligEffekt?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+
 
 //MONGODB FUNKTIONER
 client.connect(err => {
@@ -70,8 +73,13 @@ client.connect(err => {
 	    let replacedData = await realTimeData.replaceOne({MeterID: jsonData.MeterID}, jsonData);
 	};
     }
+
+    
     async function getRealTime(meterID){
-	let realTimeDataa = await realTimeData.findOne({MeterID: meterID})
+	var realTimeDataa = await realTimeData.findOne({MeterID: meterID})
+	    .catch((err) => {
+		console.error(err);
+	    });
 	return realTimeDataa;
     }
 
@@ -87,7 +95,11 @@ client.connect(err => {
 	var year = d.getFullYear().toString();
 	var date = day+month+year;
 	//--------------------
-	let currentData = await kwH.findOne({MeterID: jsonData.MeterID,Timestamp: date});
+	let currentData = await kwH.findOne({MeterID: jsonData.MeterID,Timestamp: date})
+	    .catch((err) => {
+		console.error(err)
+		console.log("Errorrrr");
+	    });
 
 	if(currentData == undefined){
 	    let insertData = await kwH.insertOne({MeterID: meterID, Timestamp: date, kwH: kiloWattH }).catch((error) => console.error(error));
@@ -98,13 +110,29 @@ client.connect(err => {
 	    let replacedData = await kwH.replaceOne({MeterID: jsonData.MeterID}, {MeterID: meterID, Timestamp: date, kwH: accumelatedKwh});
 	};
     }
+    async function getkWh(data){
+	var d = new Date();
+	var day = d.getDate().toString();
+	var month = (d.getMonth()+1).toString();
+	var year = d.getFullYear().toString();
+	var date = day+month+year;
+	
+	let currentData = await kwH.findOne({MeterID: data.MeterID, Timestamp:date})
+	    .catch((err) => {
+		console.error(err)
+		console.log("Errorrrr");
+	    });
+	return currentData.kwH;
+
+    }
 
     //REQUESTS--------------------------------------------------------------------------
 
     //Gets realtime data from DB with ID = MeterID
     app.post("/getRealTimeData",async(req, res) => {
-	var data = await getRealTime(req.body.MeterID);
-	res.send({data: data});
+	var data1 = await getRealTime(req.body.MeterID);
+	var data2 = await getkWh(req.body);
+	res.send({data: data1, kwH: data2});
     });
 
     app.post("/liveInFetch", async(req,res) => {
@@ -132,6 +160,3 @@ client.connect(err => {
 
 });
 client.close();
-
-
-

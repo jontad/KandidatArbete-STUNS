@@ -39,7 +39,7 @@ const chartConfig = {
   barPercentage: 0.5,
   labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
   propsForLabels: {
-    fontFamily: 'sans-serif',
+    //fontFamily: 'sans-serif',
   },
   
 }
