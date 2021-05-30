@@ -1,14 +1,12 @@
-import React, { Component, createRef } from 'react';
-import { SafeAreaView, LogBox, Button } from 'react-native';
-import * as Notifications from 'expo-notifications';
+import React, { Component } from 'react';
+import { SafeAreaView, Button, TouchableOpacity } from 'react-native';
 
 import axios from 'axios';
+import * as Notifications from 'expo-notifications';
+import { Ionicons } from '@expo/vector-icons';
 
 import InfoCard from '../components/InfoCard';
-
 import { config } from '../config';
-
-// LogBox.ignoreAllLogs();
 
 class Hem extends Component {
 	constructor() {
@@ -140,7 +138,7 @@ class Hem extends Component {
 	}
 
 	async componentDidMount() {
-		console.log('--------Home.js DID MOUNT------------');
+		console.log('--------Hem.js DID MOUNT------------');
 
 		//fetch data for home screen
 		await this.fetchData();
@@ -164,6 +162,18 @@ class Hem extends Component {
 		console.log(this.state.situation);
 	}
 
+	informationButton() {
+		return (
+			<TouchableOpacity
+				onPress={() => {
+					this.props.navigation.navigate('SecondScreen');
+				}}
+			>
+				<Ionicons name="information-circle-outline" style={{ opacity: 0.6, color: 'black' }} size={25} />
+			</TouchableOpacity>
+		);
+	}
+
 	render() {
 		return (
 			<SafeAreaView>
@@ -176,7 +186,11 @@ class Hem extends Component {
 					rightText={this.state.priceToday + ' kr'}
 				/>
 				<InfoCard headerText="Förbrukning denna vecka" leftText="62.5 kWh" rightText="129.02 kr" />
-				<InfoCard headerText="Situation" leftText={this.state.situation} />
+				<InfoCard
+					headerText="Situation"
+					leftText={this.state.situation}
+					infoPosition={this.informationButton(this.props.navigation)}
+				/>
 			</SafeAreaView>
 		);
 	}
