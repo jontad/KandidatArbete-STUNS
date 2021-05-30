@@ -10,9 +10,9 @@ class Fasbelastning extends Component {
     constructor(){
 	super();
 	this.state = {
-	    maximum: {il1: 4,
-		      il2: 4,
-		      il3:4},
+	    maximum: {il1: 10,
+		      il2: 10,
+		      il3:10},
 	    fasBelastning: { labels: ['fas 1', 'fas 2', 'fas 3'],
 			     data: [0.4, 0.6, 0.8]},
 	       

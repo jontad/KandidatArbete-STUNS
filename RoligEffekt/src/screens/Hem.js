@@ -74,7 +74,7 @@ class Hem extends Component {
 		<SafeAreaView >
 		<InfoCard headerText="Användande nu" leftText={this.state.currentWatt + " w"} />
 		<InfoCard headerText="Förbrukning idag" leftText={this.state.usageToday +" kWh"} rightText={this.state.priceToday + " kr"} />
-				<InfoCard headerText="Förbrukning denna vecka" leftText="62.5 kWh" rightText="129.02 kr" />
+				<InfoCard headerText="Förbrukning denna vecka" leftText="62.5 kWh" rightText="30.02 kr" />
 		<InfoCard headerText="Situation" leftText={this.state.situation} />
 	
 		</SafeAreaView>
