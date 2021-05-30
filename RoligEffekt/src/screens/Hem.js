@@ -1,7 +1,7 @@
 import React, { Component, createRef } from 'react';
 import { SafeAreaView, LogBox, Button } from 'react-native';
-import * as Notifications from 'expo-notifications';
 
+import * as Notifications from 'expo-notifications';
 import axios from 'axios';
 
 import InfoCard from '../components/InfoCard';
@@ -74,10 +74,13 @@ class Hem extends Component {
 				liveIn: 'fetch',
 			})
 			.then((response) => {
-				var status = response.data.status;
+			    var status = response.data.status;
+			   
 				if (status.output) {
-					if (this.state.situation === 'IMPORT') {
-						this.sendPushNotification('ELSITUATION', 'Just nu är din el exporterad!');
+				    if (this.state.situation === 'IMPORT') {
+					 
+					    this.sendPushNotification('ELSITUATION', 'Just nu är din el exporterad!');
+					   
 					}
 					this.setState({ situation: 'EXPORT' });
 				} else {
@@ -162,14 +165,17 @@ class Hem extends Component {
 
 	//for testing notifications
 	changeSituation() {
-		let sit = this.state.situation;
+	    let sit = this.state.situation;
+	    
 		if (sit === 'EXPORT') {
 			this.setState({ situation: 'IMPORT' });
-			this.sendPushNotification('ELSITUATION', 'EXPORT');
+		//	this.sendPushNotification('ELSITUATION', 'EXPORT');
 		} else {
 			this.setState({ situation: 'EXPORT' });
-			this.sendPushNotification('ELSITUATION', 'IMPORT');
+			//this.sendPushNotification('ELSITUATION', 'IMPORT');
 		}
+	    console.log(this.state.situation);
+	   
 	}
 
 	render() {
