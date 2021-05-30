@@ -1,28 +1,31 @@
-import React, { Component } from 'react';
-import { SafeAreaView, Button, TouchableOpacity } from 'react-native';
+import React, { Component, createRef } from 'react';
+import { SafeAreaView, LogBox, Button } from 'react-native';
+import * as Notifications from 'expo-notifications';
 
 import axios from 'axios';
-import * as Notifications from 'expo-notifications';
-import { Ionicons } from '@expo/vector-icons';
 
 import InfoCard from '../components/InfoCard';
+
 import { config } from '../config';
 
+// LogBox.ignoreAllLogs();
+
 class Hem extends Component {
-	constructor() {
-		super();
+    constructor() {
+	super();
 
-		this.state = {
-			currentWatt: 0,
-			usageToday: 0,
-			situation: 'EXPORT',
-			facility: 0,
-			trend: 'unknown',
-			priceToday: 0,
-
-			token: '',
-			notification: false,
-		};
+	this.state = {
+	    currentWatt: 0,
+	    usageToday: 0,
+	    situation: 'EXPORT',
+	    facility: 0,
+	    trend: 'unknown',
+	    priceToday: 0,
+            weekUsage: 0,
+	    weekPrice: 0,
+	    token: '',
+	    notification: false,
+	};
 
 		this.fetchData = this.fetchData.bind(this);
 	}
@@ -33,26 +36,36 @@ class Hem extends Component {
 				test: 'hejsan',
 				MeterID: '5706567316639529',
 			})
-			.then((response) => {
-				var watt = response.data.data.ActivePowerPlus;
-				var kwh = response.data.kwH;
-				var priceToday = kwh * 0.4;
-				kwh = kwh.toFixed(5);
-				priceToday = priceToday.toFixed(4);
-				this.setState({ usageToday: kwh });
-				this.setState({ currentWatt: watt });
-				this.setState({ priceToday: priceToday });
-				console.log(this.state.currentWatt);
+		.then((response) => {
+		    var watt = response.data.data.ActivePowerPlus;
+		    var kwh = response.data.kwH;
+		    var priceToday = kwh * 0.4;
+		    var kwhWeekData = response.data.kwHWeek;
+		    var weeklyUse = 0;
+		    for (x in kwhWeekData){
+			weeklyUse = weeklyUse + kwhWeekData[x].kwH;
+		    }
+		    var priceWeek = weeklyUse*0.4;
+		    kwh = kwh.toFixed(5);
+		    priceToday = priceToday.toFixed(4);
+		    priceWeek = priceWeek.toFixed(4);
+		    weeklyUse = weeklyUse.toFixed(5);
+		    this.setState({ usageToday: kwh });
+		    this.setState({ currentWatt: watt });
+		    this.setState({ priceToday: priceToday });
+		    this.setState({ weekUsage: weeklyUse});
+		    this.setState({ weekPrice: priceWeek});
+		    console.log(this.state.currentWatt);
 
-				if (this.state.watt == 2500) {
-					this.sendPushNotification('Effektanvändning', 'Du använder just nu ' + watt + '! Det börjar bli tungt!');
-				}
+		    if (this.state.watt == 2500) {
+			this.sendPushNotification('Effektanvändning', 'Du använder just nu ' + watt + '! Det börjar bli tungt!');
+		    }
 
-				return response;
-			})
-			.catch((error) => {
-				console.log('Got error in _getReatltimeData', error);
-			});
+		    return response;
+		})
+		.catch((error) => {
+		    console.log('Got error in _getReatltimeData', error);
+		});
 	}
 
 	async _getLiveInData() {
@@ -84,7 +97,6 @@ class Hem extends Component {
 		await this._getLiveInData();
 		this.fetchDataTimeout = setTimeout(this.fetchData, 2000);
 
-		console.log(this.state.situation);
 	}
 
 	async sendPushNotification(title, body) {
@@ -123,7 +135,6 @@ class Hem extends Component {
 		}
 
 		token = (await Notifications.getExpoPushTokenAsync()).data;
-		console.log(token);
 
 		if (Platform.OS === 'android') {
 			Notifications.setNotificationChannelAsync('default', {
@@ -138,7 +149,7 @@ class Hem extends Component {
 	}
 
 	async componentDidMount() {
-		console.log('--------Hem.js DID MOUNT------------');
+		console.log('--------Home.js DID MOUNT------------');
 
 		//fetch data for home screen
 		await this.fetchData();
@@ -159,19 +170,6 @@ class Hem extends Component {
 			this.setState({ situation: 'EXPORT' });
 			this.sendPushNotification('ELSITUATION', 'IMPORT');
 		}
-		console.log(this.state.situation);
-	}
-
-	informationButton() {
-		return (
-			<TouchableOpacity
-				onPress={() => {
-					this.props.navigation.navigate('SecondScreen');
-				}}
-			>
-				<Ionicons name="information-circle-outline" style={{ opacity: 0.6, color: 'black' }} size={25} />
-			</TouchableOpacity>
-		);
 	}
 
 	render() {
@@ -185,12 +183,8 @@ class Hem extends Component {
 					leftText={this.state.usageToday + ' kWh'}
 					rightText={this.state.priceToday + ' kr'}
 				/>
-				<InfoCard headerText="Förbrukning denna vecka" leftText="62.5 kWh" rightText="129.02 kr" />
-				<InfoCard
-					headerText="Situation"
-					leftText={this.state.situation}
-					infoPosition={this.informationButton(this.props.navigation)}
-				/>
+			<InfoCard headerText="Förbrukning denna vecka" leftText={this.state.weekUsage + " kWh"} rightText={this.state.weekPrice +" kr"} />
+				<InfoCard headerText="Situation" leftText={this.state.situation} />
 			</SafeAreaView>
 		);
 	}
