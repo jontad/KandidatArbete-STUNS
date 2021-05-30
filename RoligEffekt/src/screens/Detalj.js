@@ -3,6 +3,8 @@ import { Text, Layout, Section, SectionContent } from 'react-native-rapi-ui';
 
 import InfoGraph from '../components/InfoGraph';
 
+import { config } from '../config';
+
 const effekt = {
 	labels: ['Mån', 'Tis', 'Ons', 'Tors', 'Fre', 'Lör', 'Sön'],
 	datasets: [

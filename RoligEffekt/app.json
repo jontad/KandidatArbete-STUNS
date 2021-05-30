@@ -22,5 +22,10 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
+  },
+  "android": {
+    "package": "com.RoligEffekt.RoligEffekt",
+    "versionCode": 1,
+    "googleServicesFile": "./google-services.json"
   }
 }
