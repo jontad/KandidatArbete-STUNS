@@ -50,6 +50,22 @@ const uri = "mongodb+srv://Vlad-Ber:arneiskogen1@cluster0.ab29i.mongodb.net/Roli
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
+//Vanliga FUNKTIONER
+function getWeekNumber(d) {
+    // Copy date so don't modify original
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    // Set to nearest Thursday: current date + 4 - current day number
+    // Make Sunday's day number 7
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+    // Get first day of year
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    // Calculate full weeks to nearest Thursday
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    // Return array of year and week number
+    return weekNo;
+}
+
+
 
 //MONGODB FUNKTIONER
 client.connect(err => {
@@ -87,14 +103,18 @@ client.connect(err => {
 	var watt = jsonData.ActivePowerPlus;
 	var kiloWattH = (watt/360)/1000;
 	var meterID = jsonData.MeterID;
-	
+
+	var week = getWeekNumber(new Date());
 	//Date LOGIC
 	var d = new Date();
 	var day = d.getDate().toString();
 	var month = (d.getMonth()+1).toString();
 	var year = d.getFullYear().toString();
-	var date = day+month+year;
-	//--------------------
+	var date = year+month+day;
+	var dayNo = d.getUTCDay();
+	
+
+	//Insert dataentry or replace current
 	let currentData = await kwH.findOne({MeterID: jsonData.MeterID,Timestamp: date})
 	    .catch((err) => {
 		console.error(err)
@@ -102,20 +122,21 @@ client.connect(err => {
 	    });
 
 	if(currentData == undefined){
-	    let insertData = await kwH.insertOne({MeterID: meterID, Timestamp: date, kwH: kiloWattH }).catch((error) => console.error(error));
+	    let insertData = await kwH.insertOne({dayNo: dayNo, MeterID: meterID, Timestamp: date, kwH: kiloWattH, weekNO: week}).catch((error) => console.error(error));
 	}
 	else{
 	    let currentKwh = currentData.kwH;
 	    let accumelatedKwh = currentKwh+kiloWattH;
-	    let replacedData = await kwH.replaceOne({MeterID: jsonData.MeterID}, {MeterID: meterID, Timestamp: date, kwH: accumelatedKwh});
+	    let replacedData = await kwH.replaceOne({dayNo: dayNo, MeterID: jsonData.MeterID, Timestamp: date, weekNO: week}, {dayNo: dayNo, MeterID: meterID, weekNO:week, Timestamp: date, kwH: accumelatedKwh});
 	};
     }
-    async function getkWh(data){
+    
+    async function getkWhToday(data){
 	var d = new Date();
 	var day = d.getDate().toString();
 	var month = (d.getMonth()+1).toString();
 	var year = d.getFullYear().toString();
-	var date = day+month+year;
+	var date = year+month+day;
 	
 	let currentData = await kwH.findOne({MeterID: data.MeterID, Timestamp:date})
 	    .catch((err) => {
@@ -123,16 +144,22 @@ client.connect(err => {
 		console.log("Errorrrr");
 	    });
 	return currentData.kwH;
-
     }
+    async function getkWhWeek(data){
+	var week = getWeekNumber(new Date());
+	let currentData = await kwH.find({MeterID: data.MeterID, weekNO:week}).toArray();
+	return currentData;
+    }
+
 
     //REQUESTS--------------------------------------------------------------------------
 
     //Gets realtime data from DB with ID = MeterID
     app.post("/getRealTimeData",async(req, res) => {
 	var data1 = await getRealTime(req.body.MeterID);
-	var data2 = await getkWh(req.body);
-	res.send({data: data1, kwH: data2});
+	var data2 = await getkWhToday(req.body);
+	var data3 = await getkWhWeek(req.body);
+	res.send({data: data1, kwH: data2, kwHWeek: data3});
     });
 
     app.post("/liveInFetch", async(req,res) => {
