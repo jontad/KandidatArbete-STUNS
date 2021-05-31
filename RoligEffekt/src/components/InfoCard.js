@@ -31,8 +31,8 @@ const styles = StyleSheet.create({
 	},
 	infoPosition: {
 		position: 'absolute',
-		right: -5,
-		top: -8,
+		right: -8,
+		top: -12,
 	},
 	rightText: {
 		color: 'rgba(70, 70, 70, 1)',

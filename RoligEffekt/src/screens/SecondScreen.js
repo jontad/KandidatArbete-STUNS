@@ -16,11 +16,19 @@ class SecondScreen extends Component {
 					<Text>
 						<Text fontWeight="bold">IMPORT </Text>
 						<Text>
-							innebär att Sverige importerar el, vilket leder till risken att el som har producerats av kolkraft
-							importeras. Därför bör du använda el när den
+							– Användning bör undvikas när el importeras. Det medför stor risk för användandet av icke-grön energikälla
+							(kol, olja {'&'} naturgas). Landet är i behov av större mängd energi än det produceras, vi importerar
+							därför från grannländerna.{'\n'}
 						</Text>
-						<Text fontWeight="bold"> EXPORTERAS</Text>
-						<Text>, då vi endast producerar "ren" el.{'\n'}</Text>
+					</Text>
+
+					<Text>
+						<Text fontWeight="bold">EXPORT </Text>
+						<Text>
+							– Bra tillfälle att nyttja el, det är ingen risk för användandet av icke-grön energikälla och bättre för
+							miljön! Landets elproduktion är nog för att täcka den nuvarande konsumtionen, överskottet exporteras
+							därför!{'\n'}
+						</Text>
 					</Text>
 
 					<Text>

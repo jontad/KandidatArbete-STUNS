@@ -2,8 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 /*
-Horizontal button used in login/signup
-
+Horizontal button used in login/signup	
 */
 
 const LongButton = (props) => (
