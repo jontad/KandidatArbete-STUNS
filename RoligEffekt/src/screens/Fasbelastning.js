@@ -39,14 +39,18 @@ class Fasbelastning extends Component {
 		 	var belIl2 = il2 / this.state.maximum.il2;
 		     var belIl3 = il3 / this.state.maximum.il3;
 
-		     if (belIl1 > 0.8 || belIl2 > 0.8 || belIl3 > 0.8 ) {
-			 if(this.state.sendMessage == true)
-			     this.sendPushNotification('FASBELASTNING', 'En av dina huvudsäkringar har nått 80% av sin maximala belastning!');
+		     if (belIl1 > 0.8 || belIl2 > 0.8 || belIl3 > 0.8 && this.state.sendMessage == true) {
+			 if(this.state.sendMessage == true){
+			    
+			     this.sendPushNotification('FASBELASTNING', 'En av dina huvudsäkringar har nått 80% av sin maximala belastning!');}
 			 
+			
 			 this.setState({ sendMessage: false });
+			 
 		     }
 		     
 		     if(belIl1 < 0.8 && belIl2 < 0.8 && belIl3 < 0.8){
+	
 			 this.setState({ sendMessage: true });
 		     }
 
@@ -67,7 +71,7 @@ class Fasbelastning extends Component {
 
 	fetchData = async () => {
 		await this._getData();
-		this.fetchDataTimeout = setTimeout(this.fetchData, 2000);
+		this.fetchDataTimeout = setTimeout(this.fetchData, 6000);
 	};
 
     	async sendPushNotification(title, body) {
