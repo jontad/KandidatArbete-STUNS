@@ -2,19 +2,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdint.h>
-
+#include <stdint.h> 
 #include <fcntl.h>
 #include <errno.h>
 #include <termios.h>
 #include <unistd.h>
 #include <signal.h>
-
 #include <curl/curl.h>
-
 #include "han_packet.h"
-
 #define SERVER_ADRESS "localhost:3000"
+
 //#define SERVER_ADRESS "https://text.npr.org/"
 
 #ifndef NULL
@@ -29,13 +26,9 @@ static int serial_port = 0;
 
 struct termios tty;
 
-char* recv_buf;
-
-void upload_data() {
-
-}
 
 void do_close(int sig) {
+  printf("do_close används");
   if (sig == SIGINT) {
     *running = 0;
   }
@@ -54,22 +47,18 @@ struct raw_packet_t* retrieve_packet() {
   } while (buf[0] != 0x7E);
   printf("0x%02X ", buf[0]);
   fflush(stdout);
-  //if (buf[0] != 0x7E) return NULL;
   int cur = 1;
   do {
     read(serial_port, &buf[cur], 1);
     printf("0x%02X ", buf[cur]);
     fflush(stdout);
-    cur++;
+    cur++;  
   } while (buf[cur-1] != 0x7E && cur < 1024);
   printf("\n Read bytes: %d\n", cur);
   
   struct raw_packet_t* raw_pack = (struct raw_packet_t*) malloc(sizeof(raw_packet_t));
   raw_pack->type = (buf[1] >> 4) & 0x0f;
   int size = cur;
-  //char* tmp = buf + 8;
-
-  //read(serial_port, tmp, size - 6);
 
   if (size == 0 || raw_pack->type == 0) {
     printf("Got nothing\n");
@@ -81,25 +70,10 @@ struct raw_packet_t* retrieve_packet() {
 
   raw_packet_parse(buf, raw_pack);
 
-  /*printf("Packet type 0x%02X from %s (List %s):\n", raw_pack->type, raw_pack->meter_id, raw_pack->list_version);
-  printf("\t Meter type: %s\n", raw_pack->meter_type);
-  printf("\t Active Power +: %dW\n", raw_pack->active_power_p);
-  printf("\t Active Power -: %dW\n", raw_pack->active_power_n);
-  printf("\t Reactive Power +: %dW\n", raw_pack->reactive_power_p);
-  printf("\t Reactive Power -: %dW\n", raw_pack->reactive_power_n);
-  printf("\t Current L1: %fA\n", raw_pack->i_l1);
-  printf("\t Current L2: %fA\n", raw_pack->i_l2);
-  printf("\t Current L3: %fA\n", raw_pack->i_l3);
-  printf("\t Voltage L1: %dV\n", raw_pack->u_l1);
-  printf("\t Voltage L2: %dV\n", raw_pack->u_l2);
-  printf("\t Voltage L3: %dV\n", raw_pack->u_l3);*/
-
   return raw_pack;
 }
 
 char* generate_json(struct raw_packet_t* raw) {
-  //printf("Got raw_pack %p\n", raw);
-  //printf("Meter: %s\n", raw->meter_id);
   char* json;
   asprintf(&json, "{\"%s\": \"%s\", \"%s\": \"%s\", \"%s\": \"%s\", \"%s\": %d, \"%s\": %d, \"%s\": %d, \"%s\": %d, \"%s\": %f, \"%s\": %f, \"%s\": %f, \"%s\": %d, \"%s\": %d, \"%s\": %d, \"%s\": \"%s\"}", 
       "OBISIdentifier", raw->list_version, 
@@ -123,58 +97,44 @@ char* generate_json(struct raw_packet_t* raw) {
 
 void post_data(struct raw_packet_t* raw) {
   char* json = generate_json(raw);
-
   struct curl_slist* headers = NULL;
   char agent[1024] = { 0, }; 
-
   snprintf(agent, sizeof agent, "hanClient/libcurl/%s",
            curl_version_info(CURLVERSION_NOW)->version);
   agent[sizeof agent - 1] = 0;
+  
   curl_easy_setopt(curl, CURLOPT_USERAGENT, agent);
-
-  //headers = curl_slist_append(headers, "Expect:");
   headers = curl_slist_append(headers, "Content-Type: application/json");
   curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-
+  
   curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json);
-  printf("strlen(json) = %lu\n", strlen(json));
+  //printf("strlen(json) = %lu\n", strlen(json));
   curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, strlen(json));
   
+  
   int res = curl_easy_perform(curl);
+  printf("\n RES = %d \n", res);
+  
   if(res != CURLE_OK && res != CURLE_WRITE_ERROR) {
     fprintf(stderr, "\nlibcurl: (%d) ", res);
     fprintf(stderr, "%s\n\n", curl_easy_strerror(res));
   }
+  
   curl_slist_free_all(headers);
   free(json);
+
 }
 
-void test_json() {
-  struct raw_packet_t* testp = (struct raw_packet_t*) malloc(sizeof(raw_packet_t));
-  testp->list_version = "Kamstrup_0001";
-  testp->meter_id = "0A07DA8S5D6SA5F";
-  testp->meter_type = "0ABC";
-  testp->active_power_n = 1;
-  testp->active_power_p = 12;
-  testp->reactive_power_p = 2;
-  testp->active_power_n = 3;
-  testp->i_l1 = 0.1;
-  testp->i_l2 = 0.2;
-  testp->i_l3 = 0.3;
-  testp->u_l1 = 230;
-  testp->u_l1 = 225;
-  testp->u_l1 = 235;
-  testp->date = "2020-02-18 16:46:55";
 
-  generate_json(testp);
-}
-
+////////////////////////////////// Main function ////////////////////////////////// 
 int main(int argc, char** argv) {
   printf("%s\n", curl_version());
   curl = (CURL*) malloc(sizeof(CURL));
-  //test_json();
+
+  //Check and test input port
   if (argc < 2) {
     fprintf(stderr, "Not enough args\n\thanClient <serial port>\n");
+    free(curl);
     return 1;
   }
 
@@ -182,6 +142,7 @@ int main(int argc, char** argv) {
 
   if (serial_port < 0) {
     fprintf(stderr, "Error %i when opening serial port: %s\n", errno, strerror(errno));
+    free(curl);
     return 2;
   }
 
@@ -189,9 +150,11 @@ int main(int argc, char** argv) {
   if (tcgetattr(serial_port, &tty) != 0) {
     fprintf(stderr, "Error %i when initializing serial port: %s\n", errno, strerror(errno));
     close(serial_port);
+    free(curl);
     return 3;
   }
-
+  
+  // Driver programming
   tty.c_cflag &= ~PARENB;
   tty.c_cflag &= ~CSTOPB;
   tty.c_cflag |= CS8;
@@ -222,47 +185,22 @@ int main(int argc, char** argv) {
     return 4;
   }
 
-  running = (int*) malloc(sizeof(int));
-  *running = 1;
+  // Input port initialized, no errors 
 
   curl_global_init(CURL_GLOBAL_ALL);
   curl = curl_easy_init();
 
-  sigemptyset(&susp);
+  
+  sigemptyset(&susp); 
   
   if (curl) {
-    printf("CURL initialized!\n");
-
-    recv_buf = (char*) malloc(sizeof(char));
+    
+    printf("CURL initialized!\n");    
     curl_easy_setopt(curl, CURLOPT_URL, SERVER_ADRESS);
-    //curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, printout);
-    //curl_easy_setopt(curl, CURLOPT_WRITEDATA, recv_buf);
-
-    // TESTS
-    //CURLcode res;
-    //res = curl_easy_perform(curl);
-    //printf("%s\n", curl_easy_strerror(res));
-
-
-    /*struct sigaction act = {0};
-    struct timeval interval;
-    struct itimerval period;
-
-    act.sa_handler = do_work;
-    sigaction(SIGALRM, &act, NULL);
-
-    interval.tv_sec = TIMING;
-    interval.tv_usec = 0;
-
-    period.it_interval = interval;
-    period.it_value = interval;
-
-    setitimer(ITIMER_REAL, &period, NULL);
     
     struct sigaction intc = {0};
     intc.sa_handler = do_close;
-
     sigaction(SIGINT, &intc, NULL);
 
     printf("Timer inititalized!\n");*/
@@ -270,18 +208,22 @@ int main(int argc, char** argv) {
     /// @brief 
     /// @param 
     /// @return a bo
-    while (*running) {
+    running = 1;
+    while (running) {
+
       //Läser datan från dongeln och lägger det i raw_pack
       struct raw_packet_t* raw_pack = retrieve_packet();
       post_data(raw_pack);
-      raw_destroy(raw_pack);
+      raw_destroy(raw_pack);    
     }
-    curl_easy_cleanup(curl);
+    
     close(serial_port);
+    
   } else {
     printf("Could not initialize CURL\n");
   }
   
+  curl_easy_cleanup(curl);
   curl_global_cleanup();
   return 0;
 }
