@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h> 
-
 #include <fcntl.h>
 #include <errno.h>
 #include <termios.h>
@@ -11,7 +10,6 @@
 #include <signal.h>
 #include <curl/curl.h>
 #include "han_packet.h"
-#include "utils.h"
 #define SERVER_ADRESS "https://ramlosa.midgaard.nu/api"
 //#define SERVER_ADRESS "https://text.npr.org/"
 
