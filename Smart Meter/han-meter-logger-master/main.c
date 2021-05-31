@@ -10,7 +10,8 @@
 #include <signal.h>
 #include <curl/curl.h>
 #include "han_packet.h"
-#define SERVER_ADRESS "https://ramlosa.midgaard.nu/api"
+#define SERVER_ADRESS "localhost:3000"
+
 //#define SERVER_ADRESS "https://text.npr.org/"
 
 #ifndef NULL
@@ -198,8 +199,18 @@ int main(int argc, char** argv) {
     curl_easy_setopt(curl, CURLOPT_URL, SERVER_ADRESS);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, printout);
     
+    struct sigaction intc = {0};
+    intc.sa_handler = do_close;
+    sigaction(SIGINT, &intc, NULL);
+
+    printf("Timer inititalized!\n");*/
+    
+    /// @brief 
+    /// @param 
+    /// @return a bo
     running = 1;
     while (running) {
+
       //Läser datan från dongeln och lägger det i raw_pack
       struct raw_packet_t* raw_pack = retrieve_packet();
       post_data(raw_pack);

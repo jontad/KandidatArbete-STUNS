@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "RoligEffekt",
-    "slug": "RoligEffekt",
+    "name": "withBottomTabs",
+    "slug": "withBottomTabs",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -19,14 +19,13 @@
     "ios": {
       "supportsTablet": true
     },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
-    },
     "web": {
       "favicon": "./assets/favicon.png"
     }
+  },
+  "android": {
+    "package": "com.RoligEffekt.RoligEffekt",
+    "versionCode": 1,
+    "googleServicesFile": "./google-services.json"
   }
 }
