@@ -10,10 +10,10 @@ void raw_destroy(struct raw_packet_t* pack) {
 }
 
 char* raw_read_string(const char* buf, const int cur_pos, int* len) {
-  if (buf[cur_pos] != 0x0A) {
-    fprintf(stderr, "Field not a string! (type = 0x%02X)\n", buf[cur_pos]);
-    return 0;
-  }
+  //if (buf[cur_pos] != 0x0A) {
+  //  fprintf(stderr, "Field not a string! (type = 0x%02X)\n", buf[cur_pos]);
+  //  return 0;
+  //}
   uint8_t size = buf[cur_pos+1];
   char* result = (char*) malloc((size + 2) * sizeof(char));
 
@@ -74,7 +74,12 @@ int raw_read_float(const char * buf, int cur_pos, float* result) {
   return 5;
 }
 
-void raw_packet_parse(const char* buf, struct raw_packet_t* raw_pack) {
+
+
+
+
+void raw_packet_parse_kamstrup(const char* buf, struct raw_packet_t* raw_pack) {
+
   uint16_t year = 0 | (((uint16_t)buf[17] << 8) & 0xff00) | ((uint16_t)buf[18] & 0x00ff);
   uint8_t month = buf[19];
   uint8_t day = buf[20];
@@ -88,13 +93,14 @@ void raw_packet_parse(const char* buf, struct raw_packet_t* raw_pack) {
   
   uint8_t num_elems = buf[30];
   printf("Number of elements: %d\n", num_elems);
+  
+  //Position of list version
   int cur_pos = 31;
   
   //List version
   raw_pack->list_version = raw_read_string(buf, cur_pos, &cur_pos);
   printf("list_version (%p) = %s\n", raw_pack->list_version, raw_pack->list_version);
   //OBIS for ID
-  cur_pos += raw_skip_field(buf, cur_pos);
   raw_pack->meter_id = raw_read_string(buf, cur_pos, &cur_pos);
   
   cur_pos += raw_skip_field(buf, cur_pos);
@@ -129,4 +135,73 @@ void raw_packet_parse(const char* buf, struct raw_packet_t* raw_pack) {
 
   cur_pos += raw_skip_field(buf, cur_pos);
   cur_pos += raw_read_int(buf, cur_pos, &raw_pack->u_l3);
+
 }
+
+
+
+
+void raw_packet_parse_kaifa(const char* buf, struct raw_packet_t* raw_pack) {
+  uint16_t year = 0 | (((uint16_t)buf[19] << 8) & 0xff00) | ((uint16_t)buf[20] & 0x00ff);
+  uint8_t month = buf[21];
+  uint8_t day = buf[22];
+  uint8_t hour = buf[23];
+  uint8_t minute = buf[24];
+  uint8_t second = buf[25];
+
+  printf("Date: %04d-%02d-%02d %02d:%02d:%02d\n", year, month, day, hour, minute, second);
+  raw_pack->date = (char*) malloc(32 * sizeof(char));
+  sprintf(raw_pack->date, "%04d-%02d-%02d %02d:%02d:%02d", year, month, day, hour, minute, second);
+  
+  uint8_t num_elems = buf[32];
+  printf("Number of elements: %d\n", num_elems);
+
+  //Position of list version
+  int cur_pos = 33;
+  
+  //List version
+  raw_pack->list_version = raw_read_string(buf, cur_pos, &cur_pos);
+  printf("list_version (%p) = %s\n", raw_pack->list_version, raw_pack->list_version);
+
+
+  //Since kaifa doenst have OBIS-codes in the data, no added skips are needed
+  raw_pack->meter_id = raw_read_string(buf, cur_pos, &cur_pos);
+
+  raw_pack->meter_type = raw_read_string(buf, cur_pos, &cur_pos);
+
+  cur_pos += raw_read_int(buf, cur_pos, &raw_pack->active_power_p);
+
+  cur_pos += raw_read_int(buf, cur_pos, &raw_pack->active_power_n);
+
+  cur_pos += raw_read_int(buf, cur_pos, &raw_pack->reactive_power_p);
+
+  cur_pos += raw_read_int(buf, cur_pos, &raw_pack->reactive_power_n);
+
+  cur_pos += raw_read_float(buf, cur_pos, &raw_pack->i_l1);
+
+  cur_pos += raw_read_float(buf, cur_pos, &raw_pack->i_l2);
+
+  cur_pos += raw_read_float(buf, cur_pos, &raw_pack->i_l3);
+
+  cur_pos += raw_read_int(buf, cur_pos, &raw_pack->u_l1);
+
+  cur_pos += raw_read_int(buf, cur_pos, &raw_pack->u_l2);
+
+  cur_pos += raw_read_int(buf, cur_pos, &raw_pack->u_l3);
+}
+
+
+void raw_packet_parse(const char* buf, struct raw_packet_t* raw_pack) {
+
+    //check if kaifa
+  int cur_pos = 33;
+  char* version = raw_read_string(buf, cur_pos, &cur_pos);
+  char* kaifa_version = "KFM_001";
+  int is_kaifa = strcmp(version, kaifa_version);
+  if(is_kaifa == 0) {
+    raw_packet_parse_kaifa(buf, raw_pack); 
+  } else {
+    raw_packet_parse_kamstrup(buf, raw_pack);
+  }
+}
+

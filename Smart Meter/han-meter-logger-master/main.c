@@ -53,7 +53,7 @@ struct raw_packet_t* retrieve_packet() {
     read(serial_port, &buf[cur], 1);
     printf("0x%02X ", buf[cur]);
     fflush(stdout);
-    cur++;
+    cur++;  
   } while (buf[cur-1] != 0x7E && cur < 1024);
   printf("\n Read bytes: %d\n", cur);
   
@@ -196,22 +196,16 @@ int main(int argc, char** argv) {
   
   if (curl) {
     
-    printf("CURL initialized!\n");
-    
+    printf("CURL initialized!\n");    
     curl_easy_setopt(curl, CURLOPT_URL, SERVER_ADRESS);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, printout);
     
-    running = 0;
-    while (running < 1) {
+    running = 1;
+    while (running) {
       //Läser datan från dongeln och lägger det i raw_pack
       struct raw_packet_t* raw_pack = retrieve_packet();
       post_data(raw_pack);
-      printf("Vi har läst");
-      raw_destroy(raw_pack);
-      printf("Det är här vi loopar hela tiden \n");
-      running++; 
-      //break;
-      
+      raw_destroy(raw_pack);    
     }
     
     close(serial_port);
@@ -222,8 +216,5 @@ int main(int argc, char** argv) {
   
   curl_easy_cleanup(curl);
   curl_global_cleanup();
-  //*/
-  //free(running);
-  //free(curl);
   return 0;
 }

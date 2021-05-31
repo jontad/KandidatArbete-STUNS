@@ -56,9 +56,22 @@ int raw_read_int(const char* buf, int cur_pos, void* result);
 int raw_read_float(const char * buf, int cur_pos, float* result);
 
 
-/// @brief Iterates through the data received from the serial port and parses it and puts in data in raw_pack
+/// @brief Checks which model is currently used and then calls specific parse-function.
 /// @param Buf(A buffer containing the data recieved from the serial port),
 //         raw_pack(A pointer to an empty raw_pack struct)
 /// @return ----
 void raw_packet_parse(const char* buf, struct raw_packet_t* raw_pack);
+
+
+/// @brief Iterates through the data received from the serial port of a Kamstrup-meter and parses it and puts in data in raw_pack
+/// @param Buf(A buffer containing the data recieved from the serial port),
+//         raw_pack(A pointer to an empty raw_pack struct)
+/// @return ----
+void raw_packet_parse_kamstrup(const char* buf, struct raw_packet_t* raw_pack);
+
+/// @brief Iterates through the data received from the serial port of a Kaifa-meter and parses it and puts in data in raw_pack
+/// @param Buf(A buffer containing the data recieved from the serial port),
+//         raw_pack(A pointer to an empty raw_pack struct)
+/// @return ----
+void raw_packet_parse_kaifa(const char* buf, struct raw_packet_t* raw_pack);
 #endif
