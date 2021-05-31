@@ -1,86 +1,92 @@
-import React, { Component, createRef } from 'react';
-import { SafeAreaView, LogBox, Button } from 'react-native';
+import React, { Component } from 'react';
+import { SafeAreaView, TouchableOpacity } from 'react-native';
 
 import * as Notifications from 'expo-notifications';
 import axios from 'axios';
+import { Ionicons, Entypo } from '@expo/vector-icons';
 
 import InfoCard from '../components/InfoCard';
-
 import { config } from '../config';
 
-// LogBox.ignoreAllLogs();
-
 class Hem extends Component {
-    constructor() {
-	super();
+	constructor() {
+		super();
 
-	this.state = {
-	    currentWatt: 0,
-	    usageToday: 0,
-	    situation: 'EXPORT',
-	    facility: 0,
-	    trend: 'unknown',
-	    priceToday: 0,
-            weekUsage: 0,
-	    weekPrice: 0,
-	    token: '',
-	    notification: false,
-	};
+		this.state = {
+			currentWatt: 0,
+			usageToday: 0,
+			situation: 'EXPORT',
+			facility: 0,
+			trend: 'unknown',
+			priceToday: 0,
+			weekUsage: 0,
+			weekPrice: 0,
+
+			token: '',
+			sendMessage: true,
+		};
 
 		this.fetchData = this.fetchData.bind(this);
 	}
 
+	/*** Retrieve data from database  ***/
+
+	//HTTP-request to backend for realtime from smart meter
 	async _getRealtimeData() {
 		await axios
 			.post(config.baseUrl + '/getRealTimeData', {
 				test: 'hejsan',
 				MeterID: '5706567316639529',
 			})
-		.then((response) => {
-		    var watt = response.data.data.ActivePowerPlus;
-		    var kwh = response.data.kwH;
-		    var priceToday = kwh * 0.4;
-		    var kwhWeekData = response.data.kwHWeek;
-		    var weeklyUse = 0;
-		    for (x in kwhWeekData){
-			weeklyUse = weeklyUse + kwhWeekData[x].kwH;
-		    }
-		    var priceWeek = weeklyUse*0.4;
-		    kwh = kwh.toFixed(5);
-		    priceToday = priceToday.toFixed(4);
-		    priceWeek = priceWeek.toFixed(4);
-		    weeklyUse = weeklyUse.toFixed(5);
-		    this.setState({ usageToday: kwh });
-		    this.setState({ currentWatt: watt });
-		    this.setState({ priceToday: priceToday });
-		    this.setState({ weekUsage: weeklyUse});
-		    this.setState({ weekPrice: priceWeek});
-		    console.log(this.state.currentWatt);
+			.then((response) => {
+				var watt = response.data.data.ActivePowerPlus;
+				var kwh = response.data.kwH;
+				var priceToday = kwh * 0.4;
+				var kwhWeekData = response.data.kwHWeek;
+				var weeklyUse = 0;
+				for (x in kwhWeekData) {
+					weeklyUse = weeklyUse + kwhWeekData[x].kwH;
+				}
+				var priceWeek = weeklyUse * 0.4;
+				kwh = kwh.toFixed(5);
+				priceToday = priceToday.toFixed(4);
+				priceWeek = priceWeek.toFixed(4);
+				weeklyUse = weeklyUse.toFixed(5);
+				this.setState({ usageToday: kwh });
+				this.setState({ currentWatt: watt });
+				this.setState({ priceToday: priceToday });
+				this.setState({ weekUsage: weeklyUse });
+				this.setState({ weekPrice: priceWeek });
+				console.log(this.state.currentWatt);
 
-		    if (this.state.watt == 2500) {
-			this.sendPushNotification('Effektanvändning', 'Du använder just nu ' + watt + '! Det börjar bli tungt!');
-		    }
+				if (this.state.watt > 2500) {
+					this.sendPushNotification('Effektanvändning', 'Du använder just nu ' + watt + '! Det börjar bli tungt!');
+					this.setState({ sendMessage: false });
+				}
 
-		    return response;
-		})
-		.catch((error) => {
-		    console.log('Got error in _getReatltimeData', error);
-		});
+				if (this.state.watt < 2500) {
+					this.setState({ sendMessage: true });
+				}
+
+				return response;
+			})
+			.catch((error) => {
+				console.log('Got error in _getReatltimeData', error);
+			});
 	}
 
+	//HTTP-request to LiveIn-API to determine if Sweden is exporting/importing electricity
 	async _getLiveInData() {
 		await axios
 			.post(config.baseUrl + '/liveInFetch', {
 				liveIn: 'fetch',
 			})
 			.then((response) => {
-			    var status = response.data.status;
-			   
+				var status = response.data.status;
+
 				if (status.output) {
-				    if (this.state.situation === 'IMPORT') {
-					 
-					    this.sendPushNotification('ELSITUATION', 'Just nu är din el exporterad!');
-					   
+					if (this.state.situation === 'IMPORT') {
+						this.sendPushNotification('ELSITUATION', 'Just nu är din el exporterad!');
 					}
 					this.setState({ situation: 'EXPORT' });
 				} else {
@@ -95,13 +101,14 @@ class Hem extends Component {
 			});
 	}
 
+	//Data is fetched every 2 seconds
 	async fetchData() {
 		await this._getRealtimeData();
 		await this._getLiveInData();
 		this.fetchDataTimeout = setTimeout(this.fetchData, 2000);
-
 	}
 
+	/*** Functions for sending notifications and checking permissions ***/
 	async sendPushNotification(title, body) {
 		const message = {
 			to: this.state.token,
@@ -151,6 +158,29 @@ class Hem extends Component {
 		return token;
 	}
 
+	/*** Render different components in app ***/
+	renderEmoji() {
+		currentSituation = this.state.situation;
+		if (currentSituation === 'EXPORT') {
+			return <Entypo name="emoji-happy" size={24} color="green" />;
+		} else {
+			return <Entypo name="emoji-sad" size={24} color="red" />;
+		}
+	}
+
+	renderInformationButton() {
+		return (
+			<TouchableOpacity
+				onPress={() => {
+					this.props.navigation.navigate('SecondScreen');
+				}}
+			>
+				<Ionicons name="information-circle-outline" style={{ opacity: 0.6, color: 'black' }} size={25} />
+			</TouchableOpacity>
+		);
+	}
+
+	/*** Fetch data at start ***/
 	async componentDidMount() {
 		console.log('--------Home.js DID MOUNT------------');
 
@@ -163,34 +193,26 @@ class Hem extends Component {
 		});
 	}
 
-	//for testing notifications
-	changeSituation() {
-	    let sit = this.state.situation;
-	    
-		if (sit === 'EXPORT') {
-			this.setState({ situation: 'IMPORT' });
-		//	this.sendPushNotification('ELSITUATION', 'EXPORT');
-		} else {
-			this.setState({ situation: 'EXPORT' });
-			//this.sendPushNotification('ELSITUATION', 'IMPORT');
-		}
-	    console.log(this.state.situation);
-	   
-	}
-
 	render() {
 		return (
 			<SafeAreaView>
-				<Button onPress={() => this.changeSituation()} title="Send Notification" color="#841584" />
-
 				<InfoCard headerText="Användande nu" leftText={this.state.currentWatt + ' w'} />
 				<InfoCard
 					headerText="Förbrukning idag"
 					leftText={this.state.usageToday + ' kWh'}
 					rightText={this.state.priceToday + ' kr'}
 				/>
-			<InfoCard headerText="Förbrukning denna vecka" leftText={this.state.weekUsage + " kWh"} rightText={this.state.weekPrice +" kr"} />
-				<InfoCard headerText="Situation" leftText={this.state.situation} />
+				<InfoCard
+					headerText="Förbrukning denna vecka"
+					leftText={this.state.weekUsage + ' kWh'}
+					rightText={this.state.weekPrice + ' kr'}
+				/>
+				<InfoCard
+					headerText="Situation"
+					leftText={this.state.situation}
+					rightText={this.renderEmoji()}
+					infoPosition={this.renderInformationButton()}
+				/>
 			</SafeAreaView>
 		);
 	}

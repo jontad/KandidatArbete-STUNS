@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "withBottomTabs",
-    "slug": "withBottomTabs",
+    "name": "RoligEffekt",
+    "slug": "RoligEffekt",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,7 +25,6 @@
   },
   "android": {
     "package": "com.RoligEffekt.RoligEffekt",
-    "versionCode": 1,
-    "googleServicesFile": "./google-services.json"
+    "versionCode": 1
   }
 }
