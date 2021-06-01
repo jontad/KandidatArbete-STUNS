@@ -14,12 +14,12 @@ Hardware:
 
 Software:
 * NodeJs
-* Expo GO (mobile application, optional)
+* Expo GO (mobile application)
 
 The program itself currently consists of three entities:
 * Server
 * Backend
-* Frontend (optional)
+* Frontend 
 
 ## Setup
 
@@ -32,7 +32,7 @@ $ cd \...\KandidatArbete-STUNS
 
 2. Install [Node JS](https://nodejs.org)
 
-3. Install Expo Go (Optional)
+3. Install [EXPO GO](https://expo.io/)
 
 
 ## How to run the program
@@ -63,10 +63,10 @@ Open a new terminal (or new terminal tab) and navigate to the han-meter-logger-m
 
 ```
 $ cd  \...\Smart Meter\han-meter-logger-master
-$ ./hanclient/dev/TTY012/
+$ ./hanclient/dev/USB2/
 ```
 
-3. Start the application (optional)
+3. Start the application 
 
 Start a third terminal and navigate to the RoligEffekt-folder. Start the application using the Expo-command:
 
@@ -75,11 +75,20 @@ $ cd  \...\RoligEffekt
 $ expo start
 ```
 
-*NOTE: if it is the first time you run this program, you might need to install the configurations, use NPM install:*
+*NOTE: if it is the first time you run this program, you will need to install the configurations, input your local IP-address and Electrictiy metre - ID :*
 
+3.1 Navigate to the src folder and open the config file with editor of choice:
 ```
-$ cd  \...\RoligEffekt
-$ NPM install
+$ cd  \...\KandidatArbete-STUNS\RoligEffekt\src
+$ emacs config.js
+```
+3.2 Find your Electricity metre ID and input it.
+3.3 Find your local IP-address and input it 
+
+3.4 Install the new configurations with NPM install and start with expo
+```
+$
+ NPM install
        {Wait for install to finish}
 $ expo start
 ```
