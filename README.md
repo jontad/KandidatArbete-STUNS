@@ -1,23 +1,70 @@
 # Kandidatarbete-RoligEffekt
 
+Welcome,
+
 In this repository you will find files pertaining the program that are used by the smart metre 
 This is an application for our envisioned product in which the user may see their current energy usage.  
-This is a prototype in which basic functionality has been implemented for our envisioned product,
+Important to note is that this is a prototype and therefore only basic functionality has been implemented.
 
-För att starta server :
-1.Smart meter mapp 
-2. Server filen
-3.  Nodejs server.js
-4.  
-```
-$ git glone https://github.com/uu-dsp-os-ospp-2020/dsp-fess.git
-$ cd dsp-fess
-```
-Sign up now!  
-https://localhero.ew.r.appspot.com/
+NOTE: To use this program and its components you will need the following:
 
-Project for Computer Systems with Project Work (1DT003),
-Spring 2020, Uppsala University.
+Hardware:
+* Smart electricity meter with HAN-input
+* A smart adapter (USB-adapter)
+
+Software:
+* NodeJs
+* Expo GO (mobile application, optional)
+
+
+The program itself currently consists of three entities:
+* Server
+* Backend
+* Frontend (optional)
+
+The following section will introduce how to start the program:
+
+1. Start the server:
+To start the server, first navigate to the src folder and start it using NodeJs-command
+
+```
+$ cd  \...\Smart Meter\smart-meter-api-master\src
+$ Nodejs server.js
+```
+*NOTE: if problem arises, you might need to install the configurations, use NPM install:*
+
+```
+$ cd  \...\Smart Meter\smart-meter-api-master\src
+$ NPM install
+```
+
+2. Start the HAN-meter logger:
+
+*NOTE: In order to use the HAN-meter logger you will need to know which USB-port it is connected to! In this case it was /dev/USB0*
+
+Open a new terminal (or new terminal tab) and navigate to the han-meter-logger-master folder and start the hanclient (C-file).
+
+
+```
+$ cd  \...\Smart Meter\han-meter-logger-master
+$ ./hanclient/dev/TTY012/
+```
+
+3. Start the application (optional)
+
+Start a third terminal and navigate to the RoligEffekt-folder. Start the application using the Expo-command:
+
+```
+$ cd  \...\RoligEffekt
+$ expo start
+```
+
+This will prompt an QR-code to be generated, scan this with your cellular device.
+You are now inside the application!
+
+
+Independent Project in Information Engineering (1DT350),
+Spring 2021, Uppsala University.
 
 ## Setup & Development
 
