@@ -101,6 +101,7 @@ void raw_packet_parse_kamstrup(const char* buf, struct raw_packet_t* raw_pack) {
   raw_pack->list_version = raw_read_string(buf, cur_pos, &cur_pos);
   printf("list_version (%p) = %s\n", raw_pack->list_version, raw_pack->list_version);
   //OBIS for ID
+  cur_pos += raw_skip_field(buf, cur_pos);
   raw_pack->meter_id = raw_read_string(buf, cur_pos, &cur_pos);
   
   cur_pos += raw_skip_field(buf, cur_pos);
