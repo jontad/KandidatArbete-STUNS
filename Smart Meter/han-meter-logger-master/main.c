@@ -202,12 +202,6 @@ int main(int argc, char** argv) {
     struct sigaction intc = {0};
     intc.sa_handler = do_close;
     sigaction(SIGINT, &intc, NULL);
-
-    printf("Timer inititalized!\n");*/
-    
-    /// @brief 
-    /// @param 
-    /// @return a bo
     running = 1;
     while (running) {
 

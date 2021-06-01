@@ -1,110 +1,104 @@
 # Kandidatarbete-RoligEffekt
 
-In this repository you will find files pertaining the program that are used by the smart metre 
+Welcome,
+
+In this repository you will find files pertaining to the program that are used by the smart meter. 
 This is an application for our envisioned product in which the user may see their current energy usage.  
-This is a prototype in which basic functionality has been implemented for our envisioned product,
+Important to note is that this is a prototype and therefore only basic functionality has been implemented.
 
-För att starta server :
-1.Smart meter mapp 
-2. Server filen
-3.  Nodejs server.js
-4.  
-```
-$ git glone https://github.com/uu-dsp-os-ospp-2020/dsp-fess.git
-$ cd dsp-fess
-```
-Sign up now!  
-https://localhero.ew.r.appspot.com/
+NOTE: To use this program and its components you will need the following:
 
-Project for Computer Systems with Project Work (1DT003),
-Spring 2020, Uppsala University.
+Hardware:
+* Smart electricity meter with HAN-input
+* A smart adapter (USB-adapter)
 
-## Setup & Development
+Software:
+* NodeJS
+* Expo GO (mobile application)
+
+The program itself currently consists of three entities:
+* Adapter code
+* Backend 
+* Frontend 
+
+## Setup
 
 1. In Terminal
 
 ```
-$ git glone https://github.com/uu-dsp-os-ospp-2020/dsp-fess.git
-$ cd dsp-fess
+$ git glone https://github.com/jontad/KandidatArbete-STUNS.git
+$ cd \...\KandidatArbete-STUNS
 ```
 
 2. Install [Node JS](https://nodejs.org)
 
-3. Run in terminal
+3. Install [EXPO GO](https://expo.io/)
+
+
+## How to run the program
+The following section will introduce how to start the program:
+
+1. Start the server:
+Initialise a terminal, navigate to the src folder and start it using NodeJs-command
 
 ```
-// Terminal #1
-$ cd client
-$ npm install
-$ npm start
-// Terminal #2
-$ cd backend
-$ npm install
-$ node server.js
+$ cd  \...\Smart Meter\smart-meter-api-master\src
+$ nodejs server.js
 ```
-
-Then access client via `http://localhost:3000/` in browser of choice
-
-## Deployment
-
-LocalHeroes is running on two services deployed att Google Cloud Platform. Note that you need Google Cloud SDK installed in your environment in order to be able to deploy with the following instructions. If you do, deploy like so: 
+*NOTE: if it is the first time you run this program, you might need to install the configurations, use npm install:*
 
 ```
-// Deploy client 
-$ cd client 
-$ npm run build 
-$ gcloud app deploy
-
-// Deploy backend 
-$ cd backend 
-$ gcloud app deploy
-
+$ cd  \...\Smart Meter\smart-meter-api-master\src
+$ npm install
+       {Wait for install to finish}
+$ nodejs server.js
 ```
 
-App URL: https://localhero.ew.r.appspot.com/  
-You can perform backend health check at: https://api-dot-localhero.ew.r.appspot.com/health
+2. Start the HAN-meter logger:
 
-## Katalogstruktur
-<pre>
+*NOTE: In order to use the HAN-meter logger you will need to know which USB-port it is connected to! In this case it was /dev/USB0*
 
- ├── client
-    ├── build
-        └── build files, updated on "npm run build"
-    ├── node_modules
-    ├── Makefile 
-    ├── package.json
-        └── client dependencies
-    ├── public
-        └── index.html - entry HTML file, renders root element rendered by index.js
-        └── manifest.json 
-        └── robots.txt
-    └── src
-      ├── components
-      |    └── react components used in client
-      ├── data
-      |    └── data for development
-      └── views
-          └── different views for website
-      ├── App.js - root component in app
-      ├── index.js - renders root component App among other setup things
-      ├── config.js - sets environemnt variable to "local" or "production"
-      ├── _config.yml
-      ├── app.yaml
-          └── deployment config for client service
- ├── backend
-    ├── server.js
-        └── backend logic
-    ├── package.json
-        └── backend dependencies
-    └── app.yaml
-        └── deployment config for backend service
- ├── meta
- |   ├── gruppkontrakt.md
- │   ├── medlemmar.md
- |   └── images
- |       └── images of FESS group members
- ├── README.md
-</pre>
+Open a new terminal (or new terminal tab) and navigate to the han-meter-logger-master folder and start the hanclient (C-file).
+
+
+```
+$ cd  \...\Smart Meter\han-meter-logger-master
+$ ./hanclient/dev/USB2/
+```
+
+3. Start the application 
+
+Start a third terminal and navigate to the RoligEffekt-folder. Start the application using the Expo-command:
+
+```
+$ cd  \...\RoligEffekt
+$ expo start
+```
+
+*NOTE: if it is the first time you run this program, you will need to install the configurations, input your local IP-address and Electrictiy meter - ID :*
+
+3.1 Navigate to the RoligEffekt\src folder and open the config.js file with editor of choice:
+```
+$ cd  \...\KandidatArbete-STUNS\RoligEffekt\src
+$ emacs config.js
+```
+3.2 Find your Electricity meter ID and input it.
+3.3 Find your local IP-address and input it 
+
+3.4 Install the new configurations with NPM install and start with expo
+```
+$
+ npm install
+       {Wait for install to finish}
+$ expo start
+```
+
+This will prompt an QR-code to be generated, scan this with your mobile device.
+You are now inside the application!
+
+
+Independent Project in Information Engineering (1DT350),
+Spring 2021, Uppsala University.
 
 ## Members: 
 - Alfred Barwe-Paul

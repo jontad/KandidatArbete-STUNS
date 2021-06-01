@@ -28,7 +28,7 @@ class Fasbelastning extends Component {
 	//	GET RealtimeDATA
 		 await axios.post(config.baseUrl + '/getRealTimeData', {
 		 	test: 'hejsan',
-		 	MeterID: '5706567316639529',
+		 	MeterID: config.meterID,
 		 })
 		 .then((response) => {
 		 	var il1 = response.data.data.IL1;
