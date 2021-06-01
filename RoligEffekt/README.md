@@ -19,11 +19,15 @@
    expo start
    ```
 
-5. Then open the Expo go (or Expo) application to start the frontend.
+5. 
+    ```jsx
+   Then open the Expo go (or Expo) application to start the frontend.
    How this is accomplished differs depending on the OS.
 
    Android: Open the expo go app and scan the QR-code that appears after step 4  
-   iOS: Follow this guide on [stackoverflow](https://stackoverflow.com/questions/43730608/how-do-i-run-an-app-on-a-real-ios-device-using-expo)
+   iOS: Follow [this](https://stackoverflow.com/questions/43730608/how-do-i-run-an-app-on-a-real-ios-device-using-expo) guide on stackoverflow
+
+   ```
 
 If you recieve error messages that you are missing modules,
 install these by:
