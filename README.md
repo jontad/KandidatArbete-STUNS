@@ -75,14 +75,14 @@ $ cd  \...\RoligEffekt
 $ expo start
 ```
 
-*NOTE: if it is the first time you run this program, you will need to install the configurations, input your local IP-address and Electrictiy metre - ID :*
+*NOTE: if it is the first time you run this program, you will need to install the configurations, input your local IP-address and Electrictiy meter - ID :*
 
-3.1 Navigate to the src folder and open the config file with editor of choice:
+3.1 Navigate to the RoligEffekt\src folder and open the config.js file with editor of choice:
 ```
 $ cd  \...\KandidatArbete-STUNS\RoligEffekt\src
 $ emacs config.js
 ```
-3.2 Find your Electricity metre ID and input it.
+3.2 Find your Electricity meter ID and input it.
 3.3 Find your local IP-address and input it 
 
 3.4 Install the new configurations with NPM install and start with expo
