@@ -43,7 +43,7 @@ class Detalj extends Component {
 		await axios
 			.post(config.baseUrl + '/getRealTimeData', {
 				test: 'hejsan',
-				MeterID: '5706567316639529',
+				MeterID: config.meterID,
 			})
 			.then((response) => {
 				var sortedArrayKwh = this._sortArraykWh(response.data.kwHWeek);

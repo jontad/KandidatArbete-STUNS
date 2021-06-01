@@ -36,7 +36,7 @@ class Hem extends Component {
 		await axios
 			.post(config.baseUrl + '/getRealTimeData', {
 				test: 'hejsan',
-				MeterID: '5706567316639529',
+				MeterID: config.meterID,
 			})
 			.then((response) => {
 				var watt = response.data.data.ActivePowerPlus;
