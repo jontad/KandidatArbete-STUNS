@@ -23,75 +23,78 @@ The program itself currently consists of three entities:
 
 ## Setup
 
-1. In Terminal
+1. Install [Node JS](https://nodejs.org)
+
+2. Install [EXPO GO](https://expo.io/)
+
+3. In a terminal
 
 ```
 $ git glone https://github.com/jontad/KandidatArbete-STUNS.git
 $ cd \...\KandidatArbete-STUNS
 ```
 
-2. Install [Node JS](https://nodejs.org)
-
-3. Install [EXPO GO](https://expo.io/)
-
 
 ## How to run the program
 The following section will introduce how to start the program:
 
-1. Start the server:
+1. Start the server:  
 Initialise a terminal, navigate to the src folder and start it using NodeJs-command
 
 ```
 $ cd  \...\Smart Meter\smart-meter-api-master\src
 $ nodejs server.js
 ```
-*NOTE: if it is the first time you run this program, you might need to install the configurations, use npm install:*
+   - if it is the first time you run this program, you might need to install the configurations, use npm install: 
 
-```
-$ cd  \...\Smart Meter\smart-meter-api-master\src
-$ npm install
-       {Wait for install to finish}
-$ nodejs server.js
-```
+                  ```
+                  $ cd  \...\Smart Meter\smart-meter-api-master\src
+                  $ npm install
+                             {Wait for install to finish}
+                  $ nodejs server.js
+                  ```
 
 2. Start the HAN-meter logger:
 
-*NOTE: In order to use the HAN-meter logger you will need to know which USB-port it is connected to! In this case it was /dev/USB0*
-
-Open a new terminal (or new terminal tab) and navigate to the han-meter-logger-master folder and start the hanclient (C-file).
+ ***NOTE: In order to use the HAN-meter logger you will need to know which USB-port it is connected to, In this case it was /dev/USB0***  
+ 
+Start a new terminal, navigate to the han-meter-logger-master folder and start the hanclient (C-file):
 
 
 ```
 $ cd  \...\Smart Meter\han-meter-logger-master
-$ ./hanclient/dev/USB2/
+$ ./hanclient/dev/USB0/
 ```
 
 3. Start the application 
 
-Start a third terminal and navigate to the RoligEffekt-folder. Start the application using the Expo-command:
+Open a third terminal, navigate to the RoligEffekt-folder and start the application using the Expo-command:
 
 ```
 $ cd  \...\RoligEffekt
 $ expo start
 ```
+   - if it is the first time you run this program:
+       - 3.1 Navigate to the RoligEffekt, src folder and open the config.js file with editor of choice:
+       ```
+       $ cd  \...\KandidatArbete-STUNS\RoligEffekt\src
+       $ emacs config.js
+       ```
+       - 3.2 Input Electricity meter ID.
+       - 3.3 Input your local IP-address.
+       - 3.4 When done, close and save the file.
+       - 3.5 In the same terminal, install Expo using:
+       ```
+       npm install --global expo-cli
+              {Wait for install to finish}
+       ```
+       - 3.6 After Expo, install the new configurations with npm install and start expo:
 
-*NOTE: if it is the first time you run this program, you will need to install the configurations, input your local IP-address and Electrictiy meter - ID :*
-
-3.1 Navigate to the RoligEffekt\src folder and open the config.js file with editor of choice:
-```
-$ cd  \...\KandidatArbete-STUNS\RoligEffekt\src
-$ emacs config.js
-```
-3.2 Find your Electricity meter ID and input it.
-3.3 Find your local IP-address and input it 
-
-3.4 Install the new configurations with NPM install and start with expo
-```
-$
- npm install
+       ```
+       $ npm install
        {Wait for install to finish}
-$ expo start
-```
+       $ expo start
+       ```
 
 This will prompt an QR-code to be generated, scan this with your mobile device.
 You are now inside the application!
