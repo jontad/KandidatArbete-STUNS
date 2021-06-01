@@ -16,26 +16,42 @@ Software:
 * NodeJs
 * Expo GO (mobile application, optional)
 
-
 The program itself currently consists of three entities:
 * Server
 * Backend
 * Frontend (optional)
 
+## Setup
+
+1. In Terminal
+
+```
+$ git glone https://github.com/jontad/KandidatArbete-STUNS.git
+$ cd \...\KandidatArbete-STUNS
+```
+
+2. Install [Node JS](https://nodejs.org)
+
+3. Install Expo Go (Optional)
+
+
+## How to run the program
 The following section will introduce how to start the program:
 
 1. Start the server:
-To start the server, first navigate to the src folder and start it using NodeJs-command
+Initialise a terminal, navigate to the src folder and start it using NodeJs-command
 
 ```
 $ cd  \...\Smart Meter\smart-meter-api-master\src
 $ Nodejs server.js
 ```
-*NOTE: if problem arises, you might need to install the configurations, use NPM install:*
+*NOTE: if it is the first time you run this program, you might need to install the configurations, use NPM install:*
 
 ```
 $ cd  \...\Smart Meter\smart-meter-api-master\src
 $ NPM install
+       {Wait for install to finish}
+$ Nodejs server.js
 ```
 
 2. Start the HAN-meter logger:
@@ -59,99 +75,21 @@ $ cd  \...\RoligEffekt
 $ expo start
 ```
 
+*NOTE: if it is the first time you run this program, you might need to install the configurations, use NPM install:*
+
+```
+$ cd  \...\RoligEffekt
+$ NPM install
+       {Wait for install to finish}
+$ expo start
+```
+
 This will prompt an QR-code to be generated, scan this with your cellular device.
 You are now inside the application!
 
 
 Independent Project in Information Engineering (1DT350),
 Spring 2021, Uppsala University.
-
-## Setup & Development
-
-1. In Terminal
-
-```
-$ git glone https://github.com/uu-dsp-os-ospp-2020/dsp-fess.git
-$ cd dsp-fess
-```
-
-2. Install [Node JS](https://nodejs.org)
-
-3. Run in terminal
-
-```
-// Terminal #1
-$ cd client
-$ npm install
-$ npm start
-// Terminal #2
-$ cd backend
-$ npm install
-$ node server.js
-```
-
-Then access client via `http://localhost:3000/` in browser of choice
-
-## Deployment
-
-LocalHeroes is running on two services deployed att Google Cloud Platform. Note that you need Google Cloud SDK installed in your environment in order to be able to deploy with the following instructions. If you do, deploy like so: 
-
-```
-// Deploy client 
-$ cd client 
-$ npm run build 
-$ gcloud app deploy
-
-// Deploy backend 
-$ cd backend 
-$ gcloud app deploy
-
-```
-
-App URL: https://localhero.ew.r.appspot.com/  
-You can perform backend health check at: https://api-dot-localhero.ew.r.appspot.com/health
-
-## Katalogstruktur
-<pre>
-
- ├── client
-    ├── build
-        └── build files, updated on "npm run build"
-    ├── node_modules
-    ├── Makefile 
-    ├── package.json
-        └── client dependencies
-    ├── public
-        └── index.html - entry HTML file, renders root element rendered by index.js
-        └── manifest.json 
-        └── robots.txt
-    └── src
-      ├── components
-      |    └── react components used in client
-      ├── data
-      |    └── data for development
-      └── views
-          └── different views for website
-      ├── App.js - root component in app
-      ├── index.js - renders root component App among other setup things
-      ├── config.js - sets environemnt variable to "local" or "production"
-      ├── _config.yml
-      ├── app.yaml
-          └── deployment config for client service
- ├── backend
-    ├── server.js
-        └── backend logic
-    ├── package.json
-        └── backend dependencies
-    └── app.yaml
-        └── deployment config for backend service
- ├── meta
- |   ├── gruppkontrakt.md
- │   ├── medlemmar.md
- |   └── images
- |       └── images of FESS group members
- ├── README.md
-</pre>
 
 ## Members: 
 - Alfred Barwe-Paul
