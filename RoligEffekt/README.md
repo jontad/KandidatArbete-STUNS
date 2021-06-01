@@ -9,7 +9,13 @@ If you have installed npm and expo, start the environtment by:
    ```
    
 If you recieve error messages that you are missing modules, 
-install these by expo install module-name, where module-name is the name of the missing module.
+install these by: 
+
+```jsx
+expo install module-name
+```
+where module-name is the name of the missing module
+
 
 
 # File Managements
