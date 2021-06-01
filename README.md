@@ -2,7 +2,7 @@
 
 Welcome,
 
-In this repository you will find files pertaining the program that are used by the smart metre 
+In this repository you will find files pertaining to the program that are used by the smart meter. 
 This is an application for our envisioned product in which the user may see their current energy usage.  
 Important to note is that this is a prototype and therefore only basic functionality has been implemented.
 
@@ -13,12 +13,12 @@ Hardware:
 * A smart adapter (USB-adapter)
 
 Software:
-* NodeJs
+* NodeJS
 * Expo GO (mobile application)
 
 The program itself currently consists of three entities:
-* Server
-* Backend
+* Adapter code
+* Backend 
 * Frontend 
 
 ## Setup
@@ -43,15 +43,15 @@ Initialise a terminal, navigate to the src folder and start it using NodeJs-comm
 
 ```
 $ cd  \...\Smart Meter\smart-meter-api-master\src
-$ Nodejs server.js
+$ nodejs server.js
 ```
-*NOTE: if it is the first time you run this program, you might need to install the configurations, use NPM install:*
+*NOTE: if it is the first time you run this program, you might need to install the configurations, use npm install:*
 
 ```
 $ cd  \...\Smart Meter\smart-meter-api-master\src
-$ NPM install
+$ npm install
        {Wait for install to finish}
-$ Nodejs server.js
+$ nodejs server.js
 ```
 
 2. Start the HAN-meter logger:
@@ -88,12 +88,12 @@ $ emacs config.js
 3.4 Install the new configurations with NPM install and start with expo
 ```
 $
- NPM install
+ npm install
        {Wait for install to finish}
 $ expo start
 ```
 
-This will prompt an QR-code to be generated, scan this with your cellular device.
+This will prompt an QR-code to be generated, scan this with your mobile device.
 You are now inside the application!
 
 
