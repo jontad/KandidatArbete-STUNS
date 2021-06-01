@@ -14,7 +14,7 @@ install these by:
 ```jsx
 expo install module-name
 ```
-where module-name is the name of the missing module
+where module-name is the name of the missing module.
 
 
 
