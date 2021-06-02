@@ -1,3 +1,6 @@
+This folder contains the application RoligEffekt that recieves the data from the smart meter. 
+The application is run using the mobile application Expo go.
+
 # Installation
 
 1. Install [node.js](https://nodejs.org/en/) if you haven't already

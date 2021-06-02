@@ -59,14 +59,14 @@ class Hem extends Component {
 				this.setState({ weekPrice: priceWeek });
 				console.log(this.state.currentWatt);
 
-				if (this.state.watt > 2500 && this.state.sendMessage == true) {
-					this.sendPushNotification('Effektanvändning', 'Du använder just nu ' + watt + '! Det börjar bli tungt!');
-					this.setState({ sendMessage: false });
-				}
+				// if (this.state.watt > 2500 && this.state.sendMessage == true) {
+				// 	this.sendPushNotification('Effektanvändning', 'Du använder just nu ' + watt + '! Det börjar bli tungt!');
+				// 	this.setState({ sendMessage: false });
+				// }
 
-				if (this.state.watt < 2500) {
-					this.setState({ sendMessage: true });
-				}
+				// if (this.state.watt < 2500) {
+				// 	this.setState({ sendMessage: true });
+				// }
 
 				return response;
 			})
