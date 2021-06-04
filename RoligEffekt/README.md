@@ -3,7 +3,7 @@ The application is run using the mobile application Expo go.
 
 # Installation
 
-1. Install [node.js](https://nodejs.org/en/) if you haven't already
+1. Install [node.js](https://nodejs.org/en/) if you haven't already. Node Package Manager (npm) is downloaded with node.js
 2. Install Expo
 
    ```jsx
