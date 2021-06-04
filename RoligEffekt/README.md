@@ -1,4 +1,4 @@
-This folder contains the application RoligEffekt that recieves the data from the smart meter. 
+This folder contains the client RoligEffekt that recieves the data from the smart meter. 
 The application is run using the mobile application Expo go.
 
 # Installation
