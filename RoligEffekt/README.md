@@ -63,7 +63,7 @@ To connect with server, the values of the meter ID and IP has to be changed in
 $ hostname -I
 ```
 
-* If a parser for the model is has been implemented, meterID can be determined by checking the output from han-meter-logger-master. Else follow the instructions in han-meter-logger-master\README.md for adding a new meter.  
+* If a parser for the model has been implemented, meterID can be determined by checking the output from han-meter-logger-master. Else follow the instructions in han-meter-logger-master\README.md for adding a new meter.  
 
 
 
