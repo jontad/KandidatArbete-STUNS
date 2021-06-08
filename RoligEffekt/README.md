@@ -58,3 +58,12 @@ To connect with server, the values of the meter ID and IP has to be changed in
 /src/config.js
 ```
 
+* IP can be determined by
+```jsx
+hostname -I
+```
+
+* meterID is determined by running program in han-meter-logger-master 
+
+
+
