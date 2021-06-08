@@ -39,7 +39,7 @@ $ cd \...\KandidatArbete-STUNS
 The following section will introduce how to start the program:
 
 1. Start the server:  
-Initialise a terminal, navigate to the src folder and start it using NodeJs-command
+Initialise a terminal, navigate to the src folder and start it using NodeJS-command
 
 ```
 $ cd  \...\Smart Meter\smart-meter-api-master\src
