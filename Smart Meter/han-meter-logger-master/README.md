@@ -8,7 +8,7 @@ In *main.c* the curl is initialized and the data read. The data is then parsed i
 * Kaifa
 
 
-## adding new meter to parser
+## Adding new meter to parser
 
 Implementingen a new model for the parser is done through *han_packet.c*. 
 The function *raw_packet_parse* begins by checking the version and calls a specific parser function for that meter (currently only checks for and kaifa and kamstrup)
