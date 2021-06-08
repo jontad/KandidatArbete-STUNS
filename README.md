@@ -25,7 +25,7 @@ The program itself currently consists of three entities:
 
 1. Install [Node JS](https://nodejs.org/en/download/)
 
-2. Install [EXPO GO](https://expo.io/)
+2. Install [EXPO GO](https://expo.io/) application to your phone
 
 3. In a terminal
 
