@@ -50,3 +50,11 @@ These are the folders and the functionality
 /src/navigation -> for React Navigation
 /src/screens -> for Screens
 ```
+
+# Config
+
+To connect with server, the values of the meter ID and IP has to be changed in 
+```jsx
+/src/config.js
+```
+
