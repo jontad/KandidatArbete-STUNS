@@ -6,6 +6,7 @@ In this repository you will find files pertaining to the program that are used b
 This is an application for our envisioned product in which the user may see their current energy usage.  
 Important to note is that this is a prototype and therefore only basic functionality has been implemented.
 
+
 NOTE: To use this program and its components you will need the following:
 
 Hardware:
@@ -20,6 +21,12 @@ The program itself currently consists of three entities:
 * Adapter code
 * Backend 
 * Frontend 
+
+This README will provide an abstracted explaination of all necessary parts of the system. For more precise instruction, follow the READMEs in
+```
+/RoligEffekt
+/Smart Meter
+```
 
 ## Setup
 
