@@ -3,20 +3,20 @@
 In this repository you find the files for extracting data with the mbus-circuit from the HAN-port. 
 In *main.c* the curl is initialized and the data read. The data is then parsed in *han_packet.c*. 
 
-### The parser currently supports the following meters 
-Kamstrup
-Kaifa
+## The parser currently supports the following meters 
+* Kamstrup
+* Kaifa
 
 
-### adding new meter to parser
+## adding new meter to parser
 
 Implementingen a new model for the parser is done through *han_packet.c*. 
 The function *raw_packet_parse* begins by checking the version and calls a specific parser function for that meter (currently only checks for and kaifa and kamstrup)
 2 things are needed when adding a new meter
 
-#### 1
+### 1
 Add if-statement checking the version of the new meter and call a new parser-function for that meter if the if-statement was true (see comments in han_packet.c)
-#### 2
+### 2
 If the meters dataset uses the same structure as Kamstrup or kaifa, no new parser is required. 
 However, the if-statements must still be modified in order for the correct parser to be called.
 
