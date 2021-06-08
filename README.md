@@ -23,7 +23,7 @@ The program itself currently consists of three entities:
 
 ## Setup
 
-1. Install [Node JS](https://nodejs.org)
+1. Install [Node JS](https://nodejs.org/en/download/)
 
 2. Install [EXPO GO](https://expo.io/)
 
