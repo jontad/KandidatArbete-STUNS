@@ -194,15 +194,21 @@ void raw_packet_parse_kaifa(const char* buf, struct raw_packet_t* raw_pack) {
 
 void raw_packet_parse(const char* buf, struct raw_packet_t* raw_pack) {
 
-    //check if kaifa
+  // Check meter type
+  
+  // Array position of meter-version in buf from kaifa-meter.   
   int cur_pos = 33;
   char* version = raw_read_string(buf, cur_pos, &cur_pos);
   char* kaifa_version = "KFM_001";
+ 
+  // Check if kaifa
   int is_kaifa = strcmp(version, kaifa_version);
   if(is_kaifa == 0) {
     raw_packet_parse_kaifa(buf, raw_pack); 
   } else {
+    // Else call kamstrup parser (since only the two are currently implemented)
     raw_packet_parse_kamstrup(buf, raw_pack);
   }
+  // Add additional if-statement for a new meters. 
 }
 
