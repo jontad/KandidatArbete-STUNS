@@ -59,7 +59,7 @@ To connect with server, the values of the meter ID and IP has to be changed in
 ```
 
 #### IP 
-IP can be determined by running the following:
+IP can be determined by running the following in terminal:
 
 ```jsx
 $ hostname -I
