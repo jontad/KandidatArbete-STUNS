@@ -1,12 +1,21 @@
 # HAN-meter-logger 
+In this repository you find the files needed for extracting data with the mbus-circuit from the HAN-port.
+* *main.c* - main file and where the curl is initialized and the data read.
+* *han_packet.c* - Collection of functions needed to parse the data.   
 
-In this repository you find the files for extracting data with the mbus-circuit from the HAN-port. 
-In *main.c* the curl is initialized and the data is read. The data is then parsed in *han_packet.c*. 
-
-## The parser currently supports the following meters 
+### The parser currently supports the following meters 
 * Kamstrup
 * Kaifa
 
+## Running the HAN-meter-logger
+Connect the new meter to a computer, open a terminal and run 
+
+```
+$ cd  \...\Smart Meter\han-meter-logger-master
+$ ./hanclient/dev/USB0/
+
+```
+ ***NOTE: In order to use the HAN-meter logger you will need to know which USB-port it is connected to, In this case it was /dev/USB0***  
 
 ## Adding new meter to parser
 
@@ -32,6 +41,9 @@ Therefor no bytes are required to be skipped (see difference between kaifa and k
 Depending on how the meters dataset is structured you might need to skip bytes between reeds (see *raw_packet_parse_kamstrup()*)
 
 Read (and skip if necessary) as done in the other parsers and the parser should convert the data automatically.
+
+
+
 
 ______________________________________________OMSKRIVEN VERSION - LÄS GÄRNA________________________________________________________
 
