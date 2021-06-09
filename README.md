@@ -30,8 +30,9 @@ The program itself currently consists of three entities:
 
 This README will provide an abstracted explaination of all necessary parts of the system. For more precise instruction, follow the READMEs in
 ```
-/RoligEffekt
-/Smart Meter
+/Smart Meter/han-meter-logger-master
+/Smart Meter/smart-meter-api-master
+/RoligEffekt 
 ```
 
 ## Setup
