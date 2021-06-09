@@ -1,7 +1,7 @@
 # HAN-meter-logger 
 
 In this repository you find the files for extracting data with the mbus-circuit from the HAN-port. 
-In *main.c* the curl is initialized and the data read. The data is then parsed in *han_packet.c*. 
+In *main.c* the curl is initialized and the data is read. The data is then parsed in *han_packet.c*. 
 
 ## The parser currently supports the following meters 
 * Kamstrup
@@ -11,14 +11,14 @@ In *main.c* the curl is initialized and the data read. The data is then parsed i
 ## Adding new meter to parser
 
 Implementing a new model for the parser is done through *han_packet.c*. 
-The function *raw_packet_parse* begins by checking the version and calls a specific parser function for that meter (currently only checks for and kaifa and kamstrup).
+The function *raw_packet_parse()* begins by checking the version and calls a specific parser function for that meter (currently only checks for kaifa and kamstrup).
 2 things are needed when adding a new meter
 
 ### 1
 Add if-statement checking the version of the new meter and call a new parser-function for that meter if the if-statement was true (see comments in han_packet.c).
 ### 2
 If the meters dataset uses the same structure as Kamstrup or kaifa, no new parser is required. 
-However, the if-statements must still be modified in order for the correct parser to be called.
+**However**, the if-statements must still be modified in order for the correct parser to be called.
 
 If the meters dataset does not match the structure of previous meters, a new parser is needed.
 This requires knowledge about the structure of the new meters dataset. This is needed since the parser requires you to specify wich index your data begins at.
@@ -29,7 +29,7 @@ The variable *cur_pos* should be changed to the position of the meters "list ver
 
 The biggest differance between kaifa and kamstrups datasets are the lack of OBIS-identifiers in kaifas output. 
 Therefor no bytes are required to be skipped (see difference between kaifa and kamstrup parser, kamstrup skips the OBIS-bytes between every read, kaifa does not).
-Depending on how the meters dataset is structured you might need to skip bytes between reeds (see *raw_packet_parse_kamstrup*)
+Depending on how the meters dataset is structured you might need to skip bytes between reeds (see *raw_packet_parse_kamstrup()*)
 
 Read (and skip if necessary) as done in the other parsers and the parser should convert the data automatically.
 
@@ -50,7 +50,7 @@ In this repository you find the program for extracting data with the mbus-circui
 
 Adding a new meter requires knowledge about the data-structure used by the new meters dataset and how to dechiper OBIS-code. This is needed since the parser needs you to specify which index the data begins at. See sample from Kaifa meters as an example - (https://github.com/roarfred/AmsToMqttBridge/blob/master/Samples/Kaifa/obisdata.md). This means that if the new meter uses the same data-datastructre as one of the previous meters, no new parser is needed - see the how to below.
 
-In order to add a new meter the parser need to be configured. This is done in *han_packet.c* at the function *raw_packet_parse*, which checks the version and calls a specific parser function for that meter (currently only checks for and kaifa and kamstrup).
+In order to add a new meter the parser needs to be configured. This is done in *han_packet.c* at the function *raw_packet_parse()*, which checks the version and calls a specific parser function for that meter (currently only checks for and kaifa and kamstrup).
 
 
 ## How to add a new meter:
@@ -72,7 +72,7 @@ $ ./hanclient/dev/USB0/
 
 As an example, the biggest differance between Kaifa and Kamstrups datasets are the lack of OBIS-identifiers in Kaifas output. 
 Therefor no bytes are required to be skipped (see difference between Kaifa and Kamstrup parser - Kamstrup skips the OBIS-bytes between every read, Kaifa does not).
-Depending on how the meters dataset is structured you might need to skip bytes between reeds (see *raw_packet_parse_kamstrup*)
+Depending on how the meters dataset is structured you might need to skip bytes between reeds (see *raw_packet_parse_kamstrup()*)
 
 Read (and skip if necessary) as done in the other parsers and the parser should convert the data automatically.
 
