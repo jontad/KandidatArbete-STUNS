@@ -22,6 +22,12 @@ The program itself currently consists of three entities:
 * Backend 
 * Frontend 
 
+```
+/Smart Meter/han-meter-logger-master -> Adapter Code
+/Smart Meter/smart-meter-api-master -> Server
+/RoligEffekt -> Frontend
+```
+
 This README will provide an abstracted explaination of all necessary parts of the system. For more precise instruction, follow the READMEs in
 ```
 /RoligEffekt
