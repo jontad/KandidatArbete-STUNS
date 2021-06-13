@@ -170,9 +170,10 @@ void raw_packet_parse_kamstrup(const char* buf, struct raw_packet_t* raw_pack) {
   uint8_t num_elems = buf[30];
   printf("Number of elements: %d\n", num_elems);
   
-  //Position of list version
+  // Position of list version
   int cur_pos = 31;
   
+  // Read data and place in raw_pack. Skips identifier-bytes between every read
   raw_read_and_skip(buf, raw_pack, cur_pos); 
 
 }
@@ -195,9 +196,10 @@ void raw_packet_parse_kaifa(const char* buf, struct raw_packet_t* raw_pack) {
   uint8_t num_elems = buf[32];
   printf("Number of elements: %d\n", num_elems);
 
-  //Position of list version
+  // Position of list version
   int cur_pos = 33;
   
+  // Read data and place in raw_pack
   raw_read_no_skip(buf, raw_pack, cur_pos); 
   
 }
