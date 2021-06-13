@@ -37,8 +37,8 @@ A new parser uses the same structure as the previous parsers but you need to cha
 The variable *cur_pos* should be changed to the position of the meters "list version" 
 
 The biggest differance between kaifa and kamstrups datasets are the lack of OBIS-identifiers in kaifas output. 
-Therefor no bytes are required to be skipped (see difference between kaifa and kamstrup parser, kamstrup skips the OBIS-bytes between every read, kaifa does not).
-Depending on how the meters dataset is structured you might need to skip bytes between reeds (see *raw_packet_parse_kamstrup()*)
-
-Read (and skip if necessary) as done in the other parsers and the parser should convert the data automatically.
+The kamstrup parser needs to skip these bytes, but since kaifa doesnt have them, no bytes are required to be skipped.
+If the dataset contains OBIS-identifiers between values, raw_read_and_skip() should be called (see kamstrup parser).
+If the identifiers are absent, raw_read_no_skip() is called (see kaifa parser). 
+Call one of these functions as done in the other parsers and the parser should convert the data automatically and place it in the raw_pack.
 
