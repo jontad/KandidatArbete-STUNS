@@ -75,7 +75,7 @@ int raw_read_float(const char * buf, int cur_pos, float* result) {
 }
 
 // Used for kamstrup parser 
-void raw_read_and_skip(const char* buf, struct war_packet_t* raw_pack, int cur_pos) {
+void raw_read_and_skip(const char* buf, struct raw_packet_t* raw_pack, int cur_pos) {
   
   raw_pack->list_version = raw_read_string(buf, cur_pos, &cur_pos);
   printf("list_version (%p) = %s\n", raw_pack->list_version, raw_pack->list_version);
@@ -119,7 +119,7 @@ void raw_read_and_skip(const char* buf, struct war_packet_t* raw_pack, int cur_p
 }
 
 // Used for kaifa parser
-void raw_read_no_skip(const char* buf, struct war_packet_t* raw_pack, int cur_pos) {
+void raw_read_no_skip(const char* buf, struct raw_packet_t* raw_pack, int cur_pos) {
  
   raw_pack->list_version = raw_read_string(buf, cur_pos, &cur_pos);
   printf("list_version (%p) = %s\n", raw_pack->list_version, raw_pack->list_version);
