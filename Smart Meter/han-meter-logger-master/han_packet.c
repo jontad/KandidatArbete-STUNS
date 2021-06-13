@@ -77,9 +77,11 @@ int raw_read_float(const char * buf, int cur_pos, float* result) {
 
 
 
+// Parser functions
 
 void raw_packet_parse_kamstrup(const char* buf, struct raw_packet_t* raw_pack) {
 
+  // Read Date 
   uint16_t year = 0 | (((uint16_t)buf[17] << 8) & 0xff00) | ((uint16_t)buf[18] & 0x00ff);
   uint8_t month = buf[19];
   uint8_t day = buf[20];
@@ -143,6 +145,8 @@ void raw_packet_parse_kamstrup(const char* buf, struct raw_packet_t* raw_pack) {
 
 
 void raw_packet_parse_kaifa(const char* buf, struct raw_packet_t* raw_pack) {
+  
+  // Read date 
   uint16_t year = 0 | (((uint16_t)buf[19] << 8) & 0xff00) | ((uint16_t)buf[20] & 0x00ff);
   uint8_t month = buf[21];
   uint8_t day = buf[22];
