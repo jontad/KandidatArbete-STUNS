@@ -60,7 +60,7 @@ int raw_read_float(const char * buf, int cur_pos, float* result);
 ///        raw_pack(A pointer to an empty raw_pack struct)
 ///        cur_pos (Int with the position of the List-version, updates as new values are read)
 /// @return ----
-void raw_read_and_skip(const char* buf, struct raw_packet_t* raw_pack, int cur_pos)
+void raw_read_and_skip(const char* buf, struct raw_packet_t* raw_pack, int cur_pos);
 
 /// @brief Reads values and places them into raw_pack, does not skip any bytes (Used for Kamstrup) 
 /// @param Buf(A buffer containing the data recieved from the serial port),
